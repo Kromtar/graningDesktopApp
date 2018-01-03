@@ -5,16 +5,12 @@ import * as actions from '../actions';
 
 import Landing from './Landing';
 
-const renderHomeRoute = () => {
-  if (window.location.pathname.includes('index.html')) {
-     return true;
-  } else return false;
-};
-
 class App extends Component {
 
   componentDidMount(){
-    //this.props.test();
+    this.props.checkApiUrl();
+
+    this.props.checkToken();
   }
 
   render(){

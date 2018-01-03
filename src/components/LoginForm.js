@@ -16,14 +16,14 @@ class LoginForm extends Component {
     }
 
     return (
-      <div>
+      <div className="container" style={{ marginTop:  '30px'}}>
         <form onSubmit={this.props.handleSubmit((credentials) => onClickLogin(credentials))}>
           Email:
           <Field type="text" name="email" component="input" />
-          Pass:
+          Password:
           <Field type="text" name="password" component="input" />
-          <button type="submit">
-            Next
+          <button className="teal btn-flat right white-text" type="submit">
+            Login
           </button>
         </form>
       </div>
