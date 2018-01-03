@@ -1,6 +1,9 @@
 const path = require('path');
 const url = require('url');
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
+const Store = require('electron-store');
+
+const store = new Store();
 
 let mainWindow;
 
@@ -18,3 +21,9 @@ function createWindow(){
 }
 
 app.on('ready', createWindow);
+
+//salva token de front
+ipcMain.on('newToken', (event, token) => {
+  //Guarda token en memoria
+  store.set('token', token);
+});
