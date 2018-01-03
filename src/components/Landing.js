@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import LoginForm from './LoginForm';
+import MainPanel from './MainPanel';
 
 class Landing extends Component {
-
 
   renderLanding(){
     if(this.props.loginUserState){
       return (
-        <div>
-          Estas logiado
-        </div>
+        <MainPanel />
       );
     } else {
       return (

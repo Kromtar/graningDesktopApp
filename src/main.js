@@ -22,8 +22,13 @@ function createWindow(){
 
 app.on('ready', createWindow);
 
-//salva token de front
+//Guarda token de front
 ipcMain.on('newToken', (event, token) => {
   //Guarda token en memoria
   store.set('token', token);
+});
+
+//Lee el token de memoria
+ipcMain.on('getToken', (event, arg) => {
+    event.sender.send('getToken', store.get('token'));
 });
