@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import * as actions from '../actions';
 
 //TODO: Asilar acciones no relacionadas
@@ -32,7 +31,7 @@ class LoginForm extends Component {
   }
 }
 
-LoginForm = connect(null, actions)(withRouter(LoginForm));
+LoginForm = connect(null, actions)(LoginForm);
 
 export default reduxForm({
   form: 'surveyForm'

@@ -30,7 +30,7 @@ export const testCloseOk = () => async dispatch => {
         console.log(res);
         dispatch({ type: TEST, payload: 'test' });
       } catch (err) {
-        
+
         //Manejo de error con mensaje
         console.log(err);
 
@@ -42,7 +42,8 @@ export const testCloseOk = () => async dispatch => {
     });
 };
 
-export const loginUser = (credentials, history) => async dispatch => {
+
+export const loginUser = (credentials) => async dispatch => {
 
 
     credentials.getToken = true; //TODO: Momentaneo
@@ -53,8 +54,6 @@ export const loginUser = (credentials, history) => async dispatch => {
       electron.ipcRenderer.send('newToken', res.data.token); //Envia token a electron
 
       dispatch({ type: LOGIN_USER, payload: true });
-
-      history.push('/');
 
     } catch (err) {
 
