@@ -4,6 +4,12 @@ import { connect } from 'react-redux';
 
 class UserList extends Component {
 
+  //Peticion de usuarios
+
+  //crear modulo de user por cada respuesta
+
+  //desplegar cada modulo
+
   render(){
       return(
         <div className="container" style={{ marginTop:  '30px'}}>

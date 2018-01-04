@@ -12,6 +12,8 @@ class LoginForm extends Component {
 
     const onClickLogin = (credentials) => {
         //TODO: Validar datos
+        //      Feedback de errores
+        //      Feedback de login en proceso
         this.props.loginUser(credentials, this.props.history);
     }
 
