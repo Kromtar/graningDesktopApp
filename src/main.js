@@ -7,6 +7,10 @@ const store = new Store();
 
 let mainWindow;
 
+//Crea ventana principal
+app.on('ready', createWindow);
+
+//Config ventana principal
 function createWindow(){
   mainWindow = new BrowserWindow({ width: 800, height: 600});
   const startUrl = process.env.DEV_URL ||
@@ -17,7 +21,7 @@ function createWindow(){
 	});
 	mainWindow.loadURL(startUrl);
 
-  //TODO: Camiar esta condicion por una variable de entorno
+  //TODO: Camiar esta condicion por una variable de entorno mas simbolica
   if(process.env.DEV_URL){
     console.log('Development mode');
     store.set('apiUrl', 'http://localhost:5000/');
@@ -30,16 +34,39 @@ function createWindow(){
   Menu.setApplicationMenu(mainMenu);
 }
 
-app.on('ready', createWindow);
+//Config ventana de configuracion
+function createconfigWindow() {
+  configWindow = new BrowserWindow({
+    width: 300,
+    height: 200,
+    title: 'Config',
+    minimizable: false,
+    maximizable: false
+  });
+  const startUrl = url.format({
+      pathname: path.join(__dirname, '/../build/config.html'),
+      protocol: 'file:',
+      slashes: true
+    });
+  configWindow.loadURL(startUrl);
+  if(process.env.NODE_ENV === 'production'){  //Quita el menu de la ventana en caso de estar en PROD
+    configWindow.setMenu(null);
+  }
+  configWindow.on('closed', () => {  //cuando se cierra la ventana
+    configWindow = null; //Apuntamos la referencia a null y javascript limpia la memoria de la ventana anteriro.
+  });
+}
 
+//Cierra programa
 app.on('window-all-closed', function() {
   if (process.platform != 'darwin')
     app.quit();
 });
 
-//Guarda token de front
+//-----------------Eventos de comunicacion------------------//
+
+//Guarda token
 ipcMain.on('newToken', (event, token) => {
-  //Guarda token en memoria
   store.set('token', token);
 });
 
@@ -48,7 +75,7 @@ ipcMain.on('getToken', (event) => {
     event.sender.send('getToken', store.get('token'));
 });
 
-//lee la url de la api
+//lee la url de la api de la memoria
 ipcMain.on('getApiUrl', (event) => {
     event.sender.send('getApiUrl', store.get('apiUrl'));
 });
@@ -59,14 +86,9 @@ ipcMain.on('changeApiUrl', (event, url) => {
     mainWindow.webContents.send('newApiUrl', store.get('apiUrl'));
 });
 
-//Cunado el usuario realiza logOut
-function logOut(){
-  store.delete('token');
-  //Enviar mensaje a front para cambiar estado
-  mainWindow.webContents.send('logOut');
-}
+//--------------Menu--------------//
 
-//Template de menu
+//Template del menu
 //TODO: Quitar debug de production
 const menuTemplate = [
   {
@@ -91,42 +113,27 @@ const menuTemplate = [
             }
           },
           {
-            role: 'reload'  //Shortcut para añadir la funcionalidad de reload
+            role: 'reload'
           }
         ]
       },
       {
         label: 'Quit',
-        accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',  //Ternary function
+        accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
         click(){ app.quit(); }
       }
     ]
   }
 ];
 
-//Ve que sistema operativo se esta ocupando
+//Compatibilidad menu para MAC
 if (process.platform === 'darwin'){
-  menuTemplate.unshift({}); //Soluciona problema de menu en mac
+  menuTemplate.unshift({});
 }
 
-function createconfigWindow() {
-  configWindow = new BrowserWindow({
-    width: 300,
-    height: 200,
-    title: 'Config',
-    minimizable: false,
-    maximizable: false
-  });
-  const startUrl = url.format({
-      pathname: path.join(__dirname, '/../build/config.html'),
-      protocol: 'file:',
-      slashes: true
-    });
-  configWindow.loadURL(startUrl);
-  if(process.env.NODE_ENV === 'production'){  //Quita el menu de la ventana en caso de estar en PROD
-    configWindow.setMenu(null);
-  }
-  configWindow.on('closed', () => {  //cuando se cierra la ventana
-    configWindow = null; //Apuntamos la referencia a null y javascript limpia la memoria de la ventana anteriro.
-  });
+//Evento de menu de LogOut
+function logOut(){
+  store.delete('token');
+  //Enviar mensaje a front para cambiar estado
+  mainWindow.webContents.send('logOut');
 }

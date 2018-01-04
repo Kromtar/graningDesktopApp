@@ -1,3 +1,4 @@
+//Marco navegacion secundario (requiere login)
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';

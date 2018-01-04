@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
-
 import App from './components/App';
 import reducers from './reducers';
 
@@ -14,14 +13,13 @@ const store = createStore(reducers, {}, applyMiddleware(reduxThunk));
 
 const electron = window.require("electron");
 
-//Evento de logout
+//Evento directo LogOut de electron
 electron.ipcRenderer.on('logOut', (event) => {
   store.dispatch({ type: LOGIN_USER, payload: false });
 });
 
-//Evento nueva apiUrl
+//Evento directo de cambio de ApiUrl de electron
 electron.ipcRenderer.on('newApiUrl', (event, apiUrl) => {
-  console.log(apiUrl);
   store.dispatch({ type: APIURL, payload: apiUrl });
 });
 

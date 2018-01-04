@@ -1,3 +1,4 @@
+//Seccion de listado de clientes
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 

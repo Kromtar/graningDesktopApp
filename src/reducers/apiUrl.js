@@ -1,3 +1,4 @@
+//Almacena la URL de la API
 import { APIURL } from '../actions/types';
 
 export default function(state = '' , action) {

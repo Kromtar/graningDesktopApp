@@ -1,12 +1,12 @@
+//From de login
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
+//TODO: Aislar acntions no relacionadas del import
 import * as actions from '../actions';
 
-//TODO: Asilar acciones no relacionadas
 
 class LoginForm extends Component {
-
 
   render(){
 
