@@ -32,6 +32,11 @@ function createWindow(){
 
 app.on('ready', createWindow);
 
+app.on('window-all-closed', function() {
+  if (process.platform != 'darwin')
+    app.quit();
+});
+
 //Guarda token de front
 ipcMain.on('newToken', (event, token) => {
   //Guarda token en memoria
@@ -39,7 +44,7 @@ ipcMain.on('newToken', (event, token) => {
 });
 
 //Lee el token de memoria
-ipcMain.on('getToken', (event, arg) => {
+ipcMain.on('getToken', (event) => {
     event.sender.send('getToken', store.get('token'));
 });
 
@@ -51,7 +56,7 @@ ipcMain.on('getApiUrl', (event) => {
 //Cambia la url de la API
 ipcMain.on('changeApiUrl', (event, url) => {
     store.set('apiUrl', url);
-    //que front recargue una variable globarl
+    mainWindow.webContents.send('newApiUrl', store.get('apiUrl'));
 });
 
 //Cunado el usuario realiza logOut

@@ -65,7 +65,7 @@ export const checkToken = () => async (dispatch, getState) => {
 
   //Pregunndo a electron por el token
   new Promise(resolve => {
-      electron.ipcRenderer.send('getToken', 'getToken')
+      electron.ipcRenderer.send('getToken')
       electron.ipcRenderer.on('getToken', (event, result) => {
           resolve(result);
       })
@@ -91,7 +91,7 @@ export const checkApiUrl= () => async dispatch => {
 
   //Pregunndo por la ip de la API
   new Promise(resolve => {
-      electron.ipcRenderer.send('getApiUrl', 'getToken')
+      electron.ipcRenderer.send('getApiUrl')
       electron.ipcRenderer.on('getApiUrl', (event, result) => {
           resolve(result);
       })
