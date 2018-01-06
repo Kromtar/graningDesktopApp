@@ -1,7 +1,6 @@
 //Seccion de listado de clientes
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'react-materialize';
 import ReactTable from 'react-table';
 import * as actions from '../../actions';
 
@@ -118,7 +117,7 @@ class ProjectsList extends Component {
       return(
         <div className="container" style={{ marginTop:  '30px'}}>
           <div className="card blue-grey darken-1">
-            <div className="card-content white-text">
+            <div className="card-content white-text" style={{paddingBottom: '2px', paddingTop: '10px'}}>
               <span className="card-title">Lista de proyectos</span>
             </div>
           </div>
@@ -130,10 +129,18 @@ class ProjectsList extends Component {
             noDataText="No hay datos :("
             className="-striped -highlight"
           />
-          <Button floating fab='vertical' icon='filter_list' className='red' large style={{bottom: '45px', right: '24px'}}>
-            <Button onClick={ () => onClickReload()} floating icon='refresh' className='blue'/>
-          	<Button onClick={ () => console.log('add')} floating icon='add' className='green'/>
-          </Button>
+
+
+          <div className="fixed-action-btn">
+            <a className="btn-floating btn-large red">
+              <i className="large material-icons">filter_list</i>
+            </a>
+            <ul>
+              <li><a onClick={ () => onClickReload()} className="btn-floating blue"><i className="material-icons">refresh</i></a></li>
+            </ul>
+          </div>
+
+
         </div>
       );
     }

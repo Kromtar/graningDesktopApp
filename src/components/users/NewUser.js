@@ -8,7 +8,7 @@ class NewUser extends Component {
       return(
         <div>
           <form>
-            <div className="row z-depth-2" style={{marginBottom: '4px'}}>
+            <div className="row z-depth-2" style={{marginBottom: '15px'}}>
               <div className="col s6">
                 <label>Nombre:</label>
                 <Field style={{marginBottom: '5px'}} type="text" name="name" component="input" />
@@ -18,7 +18,7 @@ class NewUser extends Component {
                 <Field style={{marginBottom: '5px'}} type="text" name="surname" component="input" />
               </div>
             </div>
-            <div className="row z-depth-2" style={{marginBottom: '3px'}}>
+            <div className="row z-depth-2" style={{marginBottom: '15px'}}>
               <div className="col s6">
                 <label>Telefono 1:</label>
                 <Field style={{marginBottom: '5px'}} type="text" name="phone1" component="input" />
@@ -30,7 +30,7 @@ class NewUser extends Component {
                 <Field style={{marginBottom: '5px'}} type="text" name="email" component="input" />
               </div>
             </div>
-            <div className="row z-depth-2" style={{marginBottom: '3px'}}>
+            <div className="row z-depth-2" style={{marginBottom: '0px'}}>
               <div className="col s6">
                   <label>Empresa:</label>
                   <Field style={{marginBottom: '5px'}} type="text" name="company" component="input" />

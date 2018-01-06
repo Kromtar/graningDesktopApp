@@ -12,7 +12,11 @@ app.on('ready', createWindow);
 
 //Config ventana principal
 function createWindow(){
-  mainWindow = new BrowserWindow({ width: 1000, height: 600});
+  mainWindow = new BrowserWindow({
+    width: 1000,
+    height: 600
+  });
+  mainWindow.maximize();
   const startUrl = process.env.DEV_URL ||
 	url.format({
 	  pathname: path.join(__dirname, '/../build/index.html'),

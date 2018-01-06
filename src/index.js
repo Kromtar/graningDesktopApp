@@ -1,3 +1,4 @@
+import 'materialize-css/dist/js/materialize.min.js'
 import 'materialize-css/dist/css/materialize.min.css';
 import 'react-table/react-table.css';
 import './customStyle/customStyle.css';

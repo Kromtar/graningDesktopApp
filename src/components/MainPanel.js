@@ -1,16 +1,20 @@
 //Marco navegacion secundario (requiere login)
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import $ from 'jquery';
 import * as actions from '../actions';
 
-import Header from './Header';
 import UsersList from './users/UsersList';
 import ProjectsList from './projects/ProjectsList';
 
 class MainPanel extends Component {
 
   componentDidMount(){
+
+    $(document).ready(function(){
+      $('ul.tabs').tabs();
+    });
+
     this.props.fetchClients();
     this.props.fetchProjects();
   }
@@ -20,22 +24,18 @@ class MainPanel extends Component {
       const onClick = (credentials) => {
         this.props.testCloseOk();
       }
-      //TODO: Modificar las tabs por un meno con el diseño de materialize
+
       return(
-          <Tabs>
-            <TabList>
-              <Tab>Clientes</Tab>
-              <Tab>Proyectos</Tab>
-            </TabList>
-
-            <TabPanel>
-              <UsersList />
-            </TabPanel>
-            <TabPanel>
-              <ProjectsList />
-            </TabPanel>
-
-          </Tabs>
+        <div className="row">
+          <div className="col s12" style={{paddingLeft: '0px', paddingRight: '0px'}}>
+            <ul className="tabs z-depth-1">
+              <li className="tab col s2"><a className="active" href="#clients">Clientes</a></li>
+              <li className="tab col s2"><a href="#projects">Proyectos</a></li>
+            </ul>
+          </div>
+          <div id="clients" className="col s12"><UsersList /></div>
+          <div id="projects" className="col s12"><ProjectsList /></div>
+        </div>
       );
     }
 };
