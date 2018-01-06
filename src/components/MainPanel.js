@@ -5,9 +5,15 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import * as actions from '../actions';
 
 import Header from './Header';
-import UserList from './users/UsersList';
+import UsersList from './users/UsersList';
+import ProjectsList from './projects/ProjectsList';
 
 class MainPanel extends Component {
+
+  componentDidMount(){
+    this.props.fetchClients();
+    this.props.fetchProjects();
+  }
 
   render(){
 
@@ -23,15 +29,22 @@ class MainPanel extends Component {
             </TabList>
 
             <TabPanel>
-              <UserList />
+              <UsersList />
             </TabPanel>
             <TabPanel>
-              <h2>Aqui va la lista de proyectos</h2>
+              <ProjectsList />
             </TabPanel>
 
           </Tabs>
       );
     }
+};
+
+function mapStateToProps(state){
+  return {
+     clients: state.clients,
+     projects: state.projects
+  };
 };
 
 export default connect(null, actions)(MainPanel);

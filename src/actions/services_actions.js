@@ -2,6 +2,15 @@ import axios from 'axios';
 import { TEST, APIURL } from './types';
 const electron = window.require("electron");
 
+//Tets de newUserForm
+export const test = () => async (dispatch, getState) => {
+  const res =  getState().form.newUserForm.values.test;
+    if(res){
+      console.log(res);
+    }
+    dispatch({ type: TEST, payload: 'test' });
+};
+
 //Tets URL de la API que no requiere token
 export const testOpen = () => async (dispatch, getState) => {
     const res = await axios.get(`${getState().apiUrl}api/testOpen`);
