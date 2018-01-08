@@ -6,7 +6,7 @@ import { reduxForm, Field } from 'redux-form';
 
 import InputField from '../aux/InputField';
 import ReviewNewUser from './ReviewNewUser';
-import validateUserFrom from './validateUserForm';
+import validateUserForm from './validateUserForm';
 
 class NewUser extends Component {
 
@@ -124,7 +124,6 @@ function mapStateToProps(state){
 NewUser = connect(mapStateToProps)(NewUser);
 
 export default reduxForm({
-  validate: validateUserFrom,
-  form: 'newUserForm',
-  initialValues: { role: 'CLIENT' }
+  validate: validateUserForm,
+  form: 'newUserForm'
 })(NewUser);

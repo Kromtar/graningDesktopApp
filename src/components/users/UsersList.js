@@ -32,7 +32,7 @@ class UsersList extends Component {
               $('#newUserModal').modal('close');
               this.setState({ showNewUser: false });    //Para que el contenido del form se limpie
               this.props.createNewUser(data);
-              //REFRESH
+              this.props.fetchClients();
             }}
             onClose={() => {
               this.setState({ showNewUser: false });  //Para que el contenido del form se limpie

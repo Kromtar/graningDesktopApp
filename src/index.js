@@ -1,6 +1,7 @@
 import 'materialize-css/dist/js/materialize.min.js'
 import 'materialize-css/dist/css/materialize.min.css';
 import 'react-table/react-table.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import './customStyle/customStyle.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
