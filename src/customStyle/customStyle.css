@@ -3,11 +3,8 @@
 }
 
 .modal{
-  max-height: 90% !important;
-}
-
-.modal.modal-fixed-footer{
-  height: 75%  !important;
+  max-height: 95% !important;
+  top: 2% !important;
 }
 
 .-previous{
@@ -28,4 +25,8 @@
 
 .-pageJump input{
   margin-bottom: 0px  !important;
+}
+
+select{
+  display: flex !important;
 }

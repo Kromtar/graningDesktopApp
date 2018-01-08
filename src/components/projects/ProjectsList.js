@@ -116,6 +116,7 @@ class ProjectsList extends Component {
 
       return(
         <div className="container" style={{ marginTop:  '30px'}}>
+
           <div className="card blue-grey darken-1">
             <div className="card-content white-text" style={{paddingBottom: '2px', paddingTop: '10px'}}>
               <span className="card-title">Lista de proyectos</span>
@@ -130,7 +131,6 @@ class ProjectsList extends Component {
             className="-striped -highlight"
           />
 
-
           <div className="fixed-action-btn">
             <a className="btn-floating btn-large red">
               <i className="large material-icons">filter_list</i>
@@ -139,7 +139,6 @@ class ProjectsList extends Component {
               <li><a onClick={ () => onClickReload()} className="btn-floating blue"><i className="material-icons">refresh</i></a></li>
             </ul>
           </div>
-
 
         </div>
       );

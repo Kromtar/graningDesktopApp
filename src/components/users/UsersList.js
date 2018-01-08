@@ -5,11 +5,16 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
 import NewUserContent from './NewUser';
+import ReviewNewUserContent from './ReviewNewUser';
+
+import tableColumns from './tableColumns';
 
 class UsersList extends Component {
 
+  state = { showNewUser: false };
+
   componentDidMount(){
-     $('.modal').modal({
+     $('#newUserModal').modal({
       dismissible: false,
       opacity: .5,
       inDuration: 300,
@@ -19,110 +24,85 @@ class UsersList extends Component {
     });
   }
 
+  renderModalContent(){
+    if(this.state.showNewUser){
+      return (
+        <div>
+          <NewUserContent
+            onUserSubmit={ () => {
+              $('#newUserModal').modal('close');
+              this.setState({ showNewUser: false });    //Para que el contenido del form se limpie
+              console.log('enviado');
+            }}
+            onClose={() => {
+              this.setState({ showNewUser: false });  //Para que el contenido del form se limpie
+              $('#newUserModal').modal('close');
+            }}
+          />
+        </div>
+      );
+    }
+  }
+
   render() {
 
     const onClickReload = () => {
       this.props.fetchClients();
     }
 
-    const test = () => {
-      this.props.test();
-    }
-
     const data = this.props.clients;
-
-    const filterStyle = {
-      width: '100%',
-      height: '25px',
-      marginTop: '8px',
-      marginBottom: '0px'
-    };
-
-    const columns = [{
-      Header: 'Empresa',
-      maxWidth: 150,
-      accessor: 'company', // String-based value accessors!
-      Filter: ({filter, onChange}) => (
-        <input
-          onChange={event => onChange(event.target.value)}
-          style={filterStyle}
-        />
-      )
-    }, {
-      Header: 'Nombre',
-      id: 'name',
-      accessor: d => d.name + ' ' + d.surname,
-      Filter: ({filter, onChange}) => (
-        <input
-          onChange={event => onChange(event.target.value)}
-          style={filterStyle}
-        />
-      )
-    }, {
-      Header: 'Mail', // Required because our accessor is not a string
-      accessor: 'email',
-      Filter: ({filter, onChange}) => (
-        <input
-          onChange={event => onChange(event.target.value)}
-          style={filterStyle}
-        />
-      )
-    }, {
-      Heder: 'Button',
-      maxWidth: 120,
-      sortable: false,
-      filterable: false,
-      Cell: row => (
-        <a className="waves-effect waves-light btn" style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small'}}>
-          <i className="material-icons right">visibility</i>
-          Ver mas
-        </a>
-      )
-    }]
 
     return (
       <div className="container" style={{ marginTop:  '30px'}}>
 
+        {/* Titulo */}
         <div className="card blue-grey darken-1">
           <div className="card-content white-text" style={{paddingBottom: '2px', paddingTop: '10px'}}>
             <span className="card-title">Lista de clientes</span>
           </div>
         </div>
 
+        {/* Tabla */}
         <ReactTable
           data={data}
-          columns={columns}
+          columns={tableColumns}
           defaultPageSize = {12}
           filterable
           noDataText="No hay datos :("
           className="-striped -highlight"
         />
 
+        {/* Boton flotante */}
         <div className="fixed-action-btn">
           <a className="btn-floating btn-large red">
             <i className="large material-icons">filter_list</i>
           </a>
           <ul>
-            <li><a onClick={ () => onClickReload()} className="btn-floating blue"><i className="material-icons">refresh</i></a></li>
-            <li><a href="#modal1" className="btn-floating green modal-trigger"><i className="material-icons">add</i></a></li>
+            <li>
+              <a onClick={ () => onClickReload()} className="btn-floating blue">
+                <i className="material-icons">refresh</i>
+              </a>
+            </li>
+            <li>
+              <a onClick={() => this.setState({ showNewUser: true })} href="#newUserModal" className="btn-floating green modal-trigger">
+                <i className="material-icons">add</i>
+              </a>
+            </li>
           </ul>
         </div>
 
-        <div id="modal1" className="modal modal-fixed-footer">
-          <div className="modal-content">
-            <h4>Añade un nuevo Cliente</h4>
-            <NewUserContent />
-          </div>
-          <div className="modal-footer">
-            <div className="col s6 left-align">
-              <a href="#!" className="modal-action modal-close waves-effect waves-green btn-flat">Cerrar</a>
+        {/* Modal */}
+        <div id="newUserModal" className="modal" style={{top: '2% !important'}}>
+          <div className="modal-content" style={{paddingBottom: '3px'}}>
+            <div class="row">
+              <div class="col s6"><h4 className="header">Añade un nuevo Cliente</h4></div>
+              <div class="col s6">
+                Aqui puedes crea un nuevo usuario para la plataforma. Luego puedes asignarle proyectos.
+              </div>
             </div>
-            <div className="col s6 right-align">
-              <a onClick={() => test()} className="waves-effect waves-green btn">Siguiente</a>
-            </div>
+            {this.renderModalContent()}
           </div>
         </div>
-
 
       </div>
     );
