@@ -1,0 +1,29 @@
+<head>
+</head>
+<body>
+  <form>
+    <div>
+      <laberl>URL Servidor API:</label>
+        <input autofocus value="http://localhost:5000/"/>
+    </div>
+    <button type="submit">OK</button>
+  </form>
+
+  <script>
+    //Gracias a electorn podemos cargar modulos externos
+    const electron = require('electron');
+    const { ipcRenderer } = electron;
+
+    document.querySelector('form').addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const { value } = document.querySelector('input');
+      ipcRenderer.send('changeApiUrl', value);
+
+      var window = electron.remote.getCurrentWindow();
+      window.close();
+    });
+  </script>
+
+
+</body>

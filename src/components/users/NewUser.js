@@ -124,7 +124,7 @@ function mapStateToProps(state){
 NewUser = connect(mapStateToProps)(NewUser);
 
 export default reduxForm({
-  //validate: validateUserFrom,
+  validate: validateUserFrom,
   form: 'newUserForm',
   initialValues: { role: 'CLIENT' }
 })(NewUser);
