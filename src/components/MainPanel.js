@@ -5,7 +5,7 @@ import $ from 'jquery';
 import * as actions from '../actions';
 
 import UsersList from './users/UsersList';
-import ProjectsList from './projects/ProjectsList';
+import ProjectsTab from './projects/ProjectsTab';
 
 class MainPanel extends Component {
 
@@ -34,7 +34,7 @@ class MainPanel extends Component {
             </ul>
           </div>
           <div id="clients" className="col s12"><UsersList /></div>
-          <div id="projects" className="col s12"><ProjectsList /></div>
+          <div id="projects" className="col s12"><ProjectsTab /></div>
         </div>
       );
     }

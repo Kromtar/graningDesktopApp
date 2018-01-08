@@ -86,18 +86,6 @@ const columns = [{
           <option value="false">Sin finalizar</option>
         </select>
       </div>
-  },
-  {
-    Heder: 'Button',
-    sortable: false,
-    maxWidth: 120,
-    filterable: false,
-    Cell: row => (
-      <a className="waves-effect waves-light btn" style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small'}}>
-        <i className="material-icons right">visibility</i>
-        Ver mas
-      </a>
-    )
   }]
 
   export default columns;

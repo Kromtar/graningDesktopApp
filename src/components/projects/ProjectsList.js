@@ -29,7 +29,6 @@ class ProjectsList extends Component {
         <div>
           <NewProjectContent
             onProjectSubmit={ (data) => {
-              console.log(data);
               this.props.createNewProject(data);
               $('#newProjectModal').modal('close');
               this.setState({ showNewProject: false });    //Para que el contenido del form se limpie
@@ -51,6 +50,24 @@ class ProjectsList extends Component {
       }
 
       const data = this.props.projects;
+
+      //Agrega la columna del boton que requiere activar una acction
+      //Tenemos una condicion de tamañano, porque el render se ejecuta 2 veces al inicio y se generan 2 botones
+      if(tableColumns.length <= 6){
+        tableColumns.push({
+          Heder: 'Button',
+          maxWidth: 120,
+          sortable: false,
+          accessor: '_id',
+          filterable: false,
+          Cell: row => (
+            <a onClick={() => this.props.getProjectDetail(row.value)} className="waves-effect waves-light btn" style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small'}}>
+              <i className="material-icons right">visibility</i>
+              Ver mas
+            </a>
+          )
+        });
+      }
 
       return(
         <div className="container" style={{ marginTop:  '30px'}}>

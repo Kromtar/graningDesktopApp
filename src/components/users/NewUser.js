@@ -58,7 +58,7 @@ class NewUser extends Component {
                   <label>Tipo de Cuenta</label>
                   <div>
                     <Field name="role" component="select">
-                      <option value="CLEINT">Cuenta para un cliente</option>
+                      <option value="CLIENT">Cuenta para un cliente</option>
                       <option value="ADMIN">Cuenta para empleado de Graning</option>
                     </Field>
                   </div>

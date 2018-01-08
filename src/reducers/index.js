@@ -6,6 +6,9 @@ import loginUserState from './loginUserStateReducer';
 import apiUrl from './apiUrl';
 import clients from './clients';
 import projects from './projects';
+import window_ProjectTab from './window_ProjectTab';
+import projectDetail from './projectDetail';
+import projectUsers from './projectUsers';
 
 export default combineReducers({
   test: test,
@@ -13,5 +16,8 @@ export default combineReducers({
   apiUrl: apiUrl,
   clients: clients,
   projects: projects,
-  form: reduxForm
+  form: reduxForm,
+  window_ProjectTab: window_ProjectTab,
+  projectDetail: projectDetail,
+  projectUsers: projectUsers
 });
