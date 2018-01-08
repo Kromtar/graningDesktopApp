@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
 import NewUserContent from './NewUser';
-import ReviewNewUserContent from './ReviewNewUser';
 
 import tableColumns from './tableColumns';
 
@@ -29,10 +28,11 @@ class UsersList extends Component {
       return (
         <div>
           <NewUserContent
-            onUserSubmit={ () => {
+            onUserSubmit={ (data) => {
               $('#newUserModal').modal('close');
               this.setState({ showNewUser: false });    //Para que el contenido del form se limpie
-              console.log('enviado');
+              this.props.createNewUser(data);
+              //REFRESH
             }}
             onClose={() => {
               this.setState({ showNewUser: false });  //Para que el contenido del form se limpie
@@ -94,12 +94,7 @@ class UsersList extends Component {
         {/* Modal */}
         <div id="newUserModal" className="modal" style={{top: '2% !important'}}>
           <div className="modal-content" style={{paddingBottom: '3px'}}>
-            <div class="row">
-              <div class="col s6"><h4 className="header">Añade un nuevo Cliente</h4></div>
-              <div class="col s6">
-                Aqui puedes crea un nuevo usuario para la plataforma. Luego puedes asignarle proyectos.
-              </div>
-            </div>
+            <h4 className="header">Añade un nuevo Cliente</h4>
             {this.renderModalContent()}
           </div>
         </div>

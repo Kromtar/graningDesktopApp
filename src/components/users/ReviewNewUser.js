@@ -9,17 +9,29 @@ class ReviewNewUser extends Component {
     if(typeof(this.props.form.newUserForm.values) !== "undefined"){
       return (
         <div>
-          {this.props.form.newUserForm.values.name}
-          {this.props.form.newUserForm.values.surname}
-          {this.props.form.newUserForm.values.phone1}
-          {this.props.form.newUserForm.values.phone2}
-          {this.props.form.newUserForm.values.email}
-          {this.props.form.newUserForm.values.company}
-          {this.props.form.newUserForm.values.department}
-          {this.props.form.newUserForm.values.address}
-          {this.props.form.newUserForm.values.workstation}
-          {this.props.form.newUserForm.values.password}
-          {this.props.form.newUserForm.values.role}
+          <p className="caption">Revisa que la informacion del nuevo usuario sea la correcta :)</p>
+          <div className="row z-depth-1" style={{marginBottom: '15px'}}>
+            <div className="col s6">
+              <p><b>Nombre:</b> {this.props.form.newUserForm.values.name}</p>
+              <p><b>Apellido:</b> {this.props.form.newUserForm.values.surname}</p>
+              <p><b>Telefono 1:</b> {this.props.form.newUserForm.values.phone1}</p>
+              <p><b>Telefono 2:</b> {this.props.form.newUserForm.values.phone2}</p>
+              <p><b>Email:</b> {this.props.form.newUserForm.values.email}</p>
+            </div>
+            <div className="col s6">
+              <p><b>Compañia:</b> {this.props.form.newUserForm.values.company}</p>
+              <p><b>Departamento:</b> {this.props.form.newUserForm.values.department}</p>
+              <p><b>Direccion:</b> {this.props.form.newUserForm.values.address}</p>
+              <p><b>Puesto de trabajo:</b> {this.props.form.newUserForm.values.workstation}</p>
+              <p><b>Contraseña:</b> {this.props.form.newUserForm.values.password}</p>
+            </div>
+            <div className="col s6">
+              <p>
+                <b>Tipo de cuenta: </b>
+                {this.props.form.newUserForm.values.role === 'CLIENT' ? 'Para un cliente' : 'Para un empleado de Graning' }
+              </p>
+            </div>
+          </div>
         </div>
       );
     }

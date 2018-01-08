@@ -1,12 +1,11 @@
 //Form nuevo usuario
 import React, { Component } from 'react';
 import $ from 'jquery';
+import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 
 import InputField from '../aux/InputField';
-
 import ReviewNewUser from './ReviewNewUser';
-
 import validateUserFrom from './validateUserForm';
 
 class NewUser extends Component {
@@ -54,7 +53,7 @@ class NewUser extends Component {
 
             <div className="row z-depth-1" style={{marginBottom: '15px'}}>
               <div className="col s6">
-                <Field type="text" name="password" placeholder="(obligatorio)" component={InputField} label="Contraseña"/>
+                <Field type="text" name="password" placeholder="(obligatorio)" component={InputField} label="Contraseña (El usuario luego puede cambiarla)"/>
                 <div>
                   <label>Tipo de Cuenta</label>
                   <div>
@@ -71,8 +70,8 @@ class NewUser extends Component {
               </div>
             </div>
 
-            {/* Nav Modal */}
-            <div class="divider"></div>
+            {/* Nav Modal New User*/}
+            <div className="divider"></div>
             <div className="modal-footer" style={{marginTop: '25px'}} >
               <a
                 onClick={() => this.props.onClose()}
@@ -90,6 +89,9 @@ class NewUser extends Component {
           {/* Review */}
           <div id="review">
             <ReviewNewUser />
+
+            {/* Nav Modal Review*/}
+            <div className="divider"></div>
             <div className="modal-footer" style={{marginTop: '25px'}} >
               <a
                 onClick={() => {
@@ -101,7 +103,7 @@ class NewUser extends Component {
               </a>
               <button
                 className="teal btn-flat right white-text"
-                onClick={() => { this.props.onUserSubmit(); }}
+                onClick={() => { this.props.onUserSubmit(this.props.form); }}
               >
                 Añadir Usuario
                 <i className="material-icons right">person_add</i>
@@ -113,7 +115,16 @@ class NewUser extends Component {
   }
 };
 
+function mapStateToProps(state){
+  return {
+    form: state.form.newUserForm
+  };
+};
+
+NewUser = connect(mapStateToProps)(NewUser);
+
 export default reduxForm({
-  validate: validateUserFrom,
-  form: 'newUserForm'
+  //validate: validateUserFrom,
+  form: 'newUserForm',
+  initialValues: { role: 'CLIENT' }
 })(NewUser);

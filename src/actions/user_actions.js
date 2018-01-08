@@ -71,3 +71,24 @@ export const fetchClients = () => async (dispatch, getState) =>{
     console.log('Error interactuando con electron', err);
   });
 };
+
+//Crea un nuevo usuario
+export const createNewUser = (data) => async (dispatch, getState) =>{
+  new Promise(resolve => {
+      electron.ipcRenderer.send('getToken')
+      electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+      })
+  }).then( async function(token){
+      try {
+        //TODO: Manejo de consultas fallidas ?
+        const res = await axios.post(`${getState().apiUrl}api/createUser`, data.values, { headers: { auth: token } });
+      } catch (err) {
+        //TODO: Manejo de error con mensaje
+        console.log('Error en peticion', err);
+      }
+  }).catch(function(err){
+    //TODO:Error al consultar a electron
+    console.log('Error interactuando con electron', err);
+  });
+};

@@ -13,7 +13,7 @@ const inputField = (props) => {
 
   return (
     <div>
-      <label>{label}</label>
+      <label><b>{label}</b></label>
       <div className="red-text">
         {isTouch && error}
       </div>
