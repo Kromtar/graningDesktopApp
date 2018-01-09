@@ -30,3 +30,7 @@
 select{
   display: flex !important;
 }
+
+.react-datepicker-wrapper input{
+  margin-bottom: 5px !important;
+}

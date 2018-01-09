@@ -8,17 +8,13 @@ const datePicker = (props) => {
   const label = props.label;
   const placeholder = props.placeholder;
 
-  console.log(input.value);
-
-  const value = typeof(input.value) === "string" ? input.value : moment(input.value).format('DD-MM-YYYY');
-
   return (
     <div>
       <label><b>{label}</b></label>
       <DatePicker
         {...input}
         dateFormat="DD-MM-YYYY"
-        selected={value ? moment(value, 'DD-MM-YYYY') : null}
+        selected={input.value ? moment(input.value, 'DD-MM-YYYY') : null}
         todayButton={"Hoy"}
         isClearable={true}
         showYearDropdown

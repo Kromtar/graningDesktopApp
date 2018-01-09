@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import ProjectsList from './ProjectsList';
 import ProjectDetail from './ProjectDetail';
+import ProjectEdit from './ProjectEdit';
 
 class ProjectsTab extends Component {
 
@@ -14,6 +15,10 @@ class ProjectsTab extends Component {
     } else if (this.props.window_ProjectTab === 'detail'){
       return (
         <ProjectDetail />
+      );
+    } else if (this.props.window_ProjectTab === 'edit'){
+      return (
+        <ProjectEdit />
       );
     }
   }

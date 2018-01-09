@@ -9,3 +9,8 @@ export const windowProjectTabViewList = () => (dispatch) => {
 export const windowProjectTabViewDetail = () => (dispatch) => {
     dispatch({ type: WINDOWPROJECTTAB, payload: 'detail' });
 };
+
+//Muestra el editor de proyecto
+export const windowProjectTabViewEdit = () => (dispatch) => {
+    dispatch({ type: WINDOWPROJECTTAB, payload: 'edit' });
+};

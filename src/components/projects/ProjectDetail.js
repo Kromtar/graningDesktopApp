@@ -32,7 +32,7 @@ class ProjectDetail extends Component {
       if(this.props.projectDetail._stage.length > 0){
         return (
           <ul id="collapsible" className="collapsible" data-collapsible="accordion">
-            {this.renderProjectStageAndRev()}
+            {this.renderProjectStage()}
           </ul>
         );
       }
@@ -40,9 +40,41 @@ class ProjectDetail extends Component {
     return <blockquote><p>No se ha creado ninguna etapa de proyecto aun</p></blockquote>;
   }
 
-  renderProjectStageAndRev(){
-    //AQUI CRAMOS DINAMICAMENTE EL Contenido
-    return <div>Test</div>
+  renderProjectStage(){
+    return _.map(this.props.projectDetail._stage, stage => {
+      return (
+          <li key={stage._id}>
+            <div className="collapsible-header"><i className="material-icons">assistant_photo</i>{stage.name}</div>
+            <div className="collapsible-body">
+              <div className="row z-depth-1" style={{paddingTop: '6px', marginBottom: '0px'}}>
+                {this.renderProjectRev(stage)}
+              </div>
+            </div>
+          </li>
+      );
+    });
+  }
+
+  renderProjectRev(stage){
+    if(stage._review.length > 0){
+      return _.map(stage._review, review => {
+        return (
+          <div key={review._id}>
+            <div className="col s4">
+             <p><b>{review.name}</b></p>
+           </div>
+           <div className="col s4">
+             <p>Fecha entrega: {review.companytoclientdate ? this.dateFormat(review.companytoclientdate) : 'Fecha pendiente'}</p>
+           </div>
+           <div className="col s4">
+             <p>Fecha correccion: {review.clienttocompany ? this.dateFormat(review.clienttocompany) : 'Fecha pendiente'}</p>
+           </div>
+         </div>
+        );
+      });
+    } else {
+      return <blockquote><p>No se ha creado ninguna Rev. en esta etapa aun</p></blockquote>;
+    }
   }
 
   //TODO: Dejar en un componente externo
@@ -124,6 +156,17 @@ class ProjectDetail extends Component {
 
                   </div>
 
+                  {/* Ficheros */}
+                  <div className="row z-depth-1" style={{marginLeft: '10px', marginRight: '10px', paddingTop: '6px'}}>
+
+                    <div className="col s12">
+                    <p><b>Documentos del proyecto:</b></p>
+                    <div className="divider" style={{marginBottom: '5px'}}></div>
+                      Aqui van los ficheros
+                    </div>
+
+                  </div>
+
                   {/* Clientes */}
                   <div className="row z-depth-1" style={{marginLeft: '10px', marginRight: '10px'}}>
                     <div className="col s12">
@@ -147,7 +190,7 @@ class ProjectDetail extends Component {
                   </a>
                 </div>
                 <div className="col s6 right-align">
-                  <a className="waves-effect orange waves-light btn">
+                  <a onClick={() => this.props.windowProjectTabViewEdit()} className="waves-effect orange waves-light btn">
                     Editar
                     <i className="material-icons right">mode_edit</i>
                   </a>
