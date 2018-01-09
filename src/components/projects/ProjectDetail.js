@@ -31,7 +31,7 @@ class ProjectDetail extends Component {
     if(typeof(this.props.projectDetail._stage) !== "undefined"){
       if(this.props.projectDetail._stage.length > 0){
         return (
-          <ul id="collapsible" className="collapsible" data-collapsible="accordion">
+          <ul id="collapsible" className="collapsible popout" data-collapsible="accordion">
             {this.renderProjectStage()}
           </ul>
         );
@@ -138,7 +138,7 @@ class ProjectDetail extends Component {
                       <p><b>Nº Orden de compra:  </b>{this.props.projectDetail.purchaseordernumber}</p>
                     </div>
                     <div className="col s6">
-                      <p><b>Fecha inicio proyecto:  </b>{this.dateFormat(this.props.projectDetail.openprojectdate)}</p>
+                      <p><b>Fecha inicio proyecto:  </b>{this.props.projectDetail.openprojectdate ? this.dateFormat(this.props.projectDetail.openprojectdate) : 'Pendiente'}</p>
                       <p><b>Fecha cierre proyecto:  </b>{this.props.projectDetail.closeprojectdate ? this.dateFormat(this.props.projectDetail.closeprojectdate) : 'Pendiente'}</p>
                       <p><b>Plazo (en dias):  </b>{this.props.projectDetail.term}</p>
                     </div>
@@ -185,7 +185,9 @@ class ProjectDetail extends Component {
               <div className="divider" style={{marginBottom: '15px'}}></div>
               <div className="row">
                 <div className="col s6 left-align">
-                  <a onClick={() => this.props.windowProjectTabViewList()} className="waves-effect waves-light btn-flat">
+                  <a onClick={() => {
+                    this.props.windowProjectTabViewList();
+                  }} className="waves-effect waves-light btn-flat">
                     Cerrar
                   </a>
                 </div>

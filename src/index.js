@@ -13,6 +13,8 @@ import reducers from './reducers';
 
 import { LOGIN_USER, APIURL } from './actions/types';
 
+require('events').EventEmitter.prototype._maxListeners = 30;
+
 const store = createStore(reducers, {}, applyMiddleware(reduxThunk));
 
 const electron = window.require("electron");

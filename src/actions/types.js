@@ -6,3 +6,7 @@ export const FETCH_PROJECTS = 'fetchProjects';
 export const WINDOWPROJECTTAB = 'windowprojecttab';
 export const FETCH_PROJECTDETAIL = 'fetchProjectDetail';
 export const FETCH_PROJECT_USERS = 'fetchProjectUsers';
+export const NEW_STAGE = 'newStage';
+export const CLEAR_NEW_STAGE = 'clearNewStage';
+export const DELETE_TEMP_STAGE = 'deleteTempStage';
+export const ADD_STAEGEID_FOR_DELETE = 'addStageidForDelete';

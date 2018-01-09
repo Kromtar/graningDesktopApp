@@ -40,8 +40,11 @@ const columns = [{
     maxWidth: 100,
     id: 'openprojectdate',
     accessor: d => {
-      const mydate = new Date(d.openprojectdate);
-      return mydate.toLocaleDateString('en-GB');
+      if(d.openprojectdate){
+        const mydate = new Date(d.openprojectdate);
+        return mydate.toLocaleDateString('en-GB');
+      }
+      return 'Pendiente';
     },
     Filter: ({filter, onChange}) => (
       <input

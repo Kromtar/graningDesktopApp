@@ -1,4 +1,4 @@
-import { WINDOWPROJECTTAB } from './types';
+import { WINDOWPROJECTTAB, CLEAR_NEW_STAGE } from './types';
 
 //Muestra la lista de proyectos dentro de la tab de proyectos
 export const windowProjectTabViewList = () => (dispatch) => {
@@ -13,4 +13,5 @@ export const windowProjectTabViewDetail = () => (dispatch) => {
 //Muestra el editor de proyecto
 export const windowProjectTabViewEdit = () => (dispatch) => {
     dispatch({ type: WINDOWPROJECTTAB, payload: 'edit' });
+    dispatch({ type: CLEAR_NEW_STAGE });
 };
