@@ -10,8 +10,21 @@ import datePicker from '../aux/DatePicker';
 import InputField from '../aux/InputField';
 import validateEditProjectForm from './validateEditProjectForm';
 import AddStage from './AddStage';
+import AddRev from './AddRev';
+import EditRev from './EditRev';
+
 
 class ProjectEdit extends Component {
+
+  state = { stageSelectedForNewRev: '',
+            infoForUpdateRev: {
+              idRev: null,
+              stageId: null,
+              revIndex: 0,
+              stageIndex: 0
+            },
+            editRevModalWhow: false
+           };
 
   componentDidMount(){
     $('#collapsibleTemp').collapsible();
@@ -25,6 +38,25 @@ class ProjectEdit extends Component {
      ready: function(modal, trigger) {},
      complete: function() {}
    });
+
+   $('#newRevModal').modal({
+      dismissible: false,
+      opacity: .5,
+      inDuration: 300,
+      outDuration: 200,
+      ready: function(modal, trigger) {},
+      complete: function() {}
+    });
+
+    $('#editRevModal').modal({
+       dismissible: false,
+       opacity: .5,
+       inDuration: 300,
+       outDuration: 200,
+       ready: function(modal, trigger) {},
+       complete: function() {}
+     });
+
   }
 
   badgeRender(){
@@ -61,9 +93,7 @@ class ProjectEdit extends Component {
             <i onClick={() => this.props.deleteTempStage(stage.tempId)} className="material-icons right" >delete</i>
           </div>
           <div className="collapsible-body">
-            <div className="row z-depth-1" style={{paddingTop: '6px', marginBottom: '0px'}}>
-              content
-            </div>
+              Guarda los cambios antes de poder añadir una revision a esta nueva estapa
           </div>
         </li>
       );
@@ -86,7 +116,7 @@ class ProjectEdit extends Component {
   }
 
   renderProjectStage(){
-    return _.map(this.props.projectDetail._stage, stage => {
+    return _.map(this.props.projectDetail._stage, (stage, stageIndex) => {
       return (
           <li id={stage._id} key={stage._id}>
             <div className="collapsible-header" style={{display: 'block'}}>
@@ -102,7 +132,26 @@ class ProjectEdit extends Component {
             </div>
             <div className="collapsible-body">
               <div className="row z-depth-1" style={{paddingTop: '6px', marginBottom: '0px'}}>
-                {this.renderProjectRev(stage)}
+                <div className="row">
+                  <div className="col s12">
+                    <a
+                      onClick={() => {
+                        this.setState({stageSelectedForNewRev: stage._id});
+                        $("#newRevModal").modal('open');
+                      }}
+                      style={{marginTop: '7px'}}
+                      className="teal waves-effect btn-flat right white-text">
+                      Añadir revision a la etapa {stage.name}
+                    </a>
+                  </div>
+                </div>
+                <div className="divider" style={{marginBottom: '5px'}}></div>
+                <div className="row">
+                  <div className="col s12">
+                    {this.renderProjectTempRev(stage)}
+                    {this.renderProjectRev(stage, stageIndex)}
+                  </div>
+                </div>
               </div>
             </div>
           </li>
@@ -110,13 +159,46 @@ class ProjectEdit extends Component {
     });
   }
 
-  renderProjectRev(stage){
+  renderProjectTempRev(stage){
+    //Solo seleccionesmos las rev temporales relacionadas a esta etapa
+    const filterRevs = _.pickBy(this.props.newRev, (value, key) => {
+      return value.stageId === stage._id
+    });
+    return _.map(filterRevs, rev => {
+      return (
+        <div className="row" key={rev.tempId}>
+          <div className="col s2">
+           <p style={{marginLeft: '10px'}}><b>{rev.data.name}</b></p>
+         </div>
+         <div className="col s4">
+           <p>Fecha entrega: {rev.data.companytoclientdate ? rev.data.companytoclientdate : 'Fecha pendiente'}</p>
+         </div>
+         <div className="col s4">
+           <p>Fecha correccion: {rev.data.clienttocompany ? rev.data.clienttocompany: 'Fecha pendiente'}</p>
+         </div>
+         <div className="col s2">
+           <i onClick={() => {
+             this.props.deleteTempRev(rev.tempId);
+           }}
+           className="material-icons center-align"
+           style={{marginTop: '15px'}}
+           >
+             delete
+           </i>
+         </div>
+       </div>
+      );
+    });
+  }
+
+  renderProjectRev(stage, stageIndex){
     if(stage._review.length > 0){
-      return _.map(stage._review, review => {
+      var count = 0;
+      return _.map(stage._review, (review, revIndex) => {
         return (
-          <div key={review._id}>
-            <div className="col s4">
-             <p><b>{review.name}</b></p>
+          <div id={review._id} className="row" key={review._id}>
+            <div className="col s2">
+             <p style={{marginLeft: '10px'}}><b>{review.name}</b></p>
            </div>
            <div className="col s4">
              <p>Fecha entrega: {review.companytoclientdate ? this.dateFormat(review.companytoclientdate) : 'Fecha pendiente'}</p>
@@ -124,15 +206,51 @@ class ProjectEdit extends Component {
            <div className="col s4">
              <p>Fecha correccion: {review.clienttocompany ? this.dateFormat(review.clienttocompany) : 'Fecha pendiente'}</p>
            </div>
+           <div className="col s2">
+             <i onClick={() => {
+               this.setState({infoForUpdateRev: {
+                 idRev: review._id,
+                 stageId: stage._id,
+                 revIndex: revIndex,
+                 stageIndex: stageIndex
+               }});
+               this.setState({editRevModalWhow: true});
+               $("#editRevModal").modal('open');
+             }}
+             className="material-icons left"
+             style={{marginTop: '15px'}}
+             >
+               border_color
+             </i>
+             <i onClick={() => {
+               this.props.addRevidForDelete(review._id, stage._id);
+               $("#"+review._id).hide();
+             }}
+             className="material-icons right"
+             style={{marginTop: '15px', marginRight: '15px'}}
+             >
+               delete
+             </i>
+           </div>
          </div>
         );
       });
-    } else {
-      return <blockquote><p>No se ha creado ninguna Rev. en esta etapa aun</p></blockquote>;
+    } if(stage._review.length > 0 && this.props.newRev.length === 0){ //Solo pone el mensaje si tampoco hay tepmps
+      return <blockquote><p>No se ha creado ninguna etapa de proyecto aun</p></blockquote>;
     }
   }
 
+  editRevModalContent(){
+    if(this.state.editRevModalWhow){
+        return <EditRev infoForUpdateRev={this.state.infoForUpdateRev} />;
+    }else{
+        return <div></div>
+    }
+  }
+
+
   render(){
+
     return(
       <div>
 
@@ -144,8 +262,13 @@ class ProjectEdit extends Component {
             this.props.editProjectGeneral(this.props.projectDetail._id, this.props.formValue).then(() => {
               this.props.addStageToProject(this.props.projectDetail._id).then(() => {
                 this.props.deleteStageFromProject(this.props.projectDetail._id).then(() => {
-                  this.props.getProjectDetail(this.props.projectDetail._id);
-                  this.props.fetchProjects();
+                  this.props.addRevToProject(this.props.projectDetail._id).then(() => {
+                      this.props.editRevsFromProyect(this.props.projectDetail._id);
+                      this.props.deleteRevFromProject(this.props.projectDetail._id);
+                      this.props.getProjectDetail(this.props.projectDetail._id);
+                      this.props.fetchProjects();
+                      this.forceUpdate();
+                  });
                 });
               });
             });
@@ -223,6 +346,42 @@ class ProjectEdit extends Component {
               </div>
             </div>
 
+            {/* Modal nueva revision */}
+            <div id="newRevModal" className="modal" style={{top: '2% !important'}}>
+              <div className="modal-content" style={{paddingBottom: '3px'}}>
+                <h5 className="header">Añade una nueva revision a la etapa</h5>
+                  <AddRev onSaveTmpRev={(data) => {
+                    this.props.tempNewRev(data, this.props.newRev.length, this.state.stageSelectedForNewRev);
+                  }}/>
+              </div>
+            </div>
+
+            {/* Modal edit revision */}
+            <div id="editRevModal" className="modal" style={{top: '2% !important'}}>
+              <div className="modal-content" style={{paddingBottom: '3px'}}>
+                <h5 className="header">Edita una revision</h5>
+
+                  <EditRev infoForUpdateRev={this.state.infoForUpdateRev} />
+
+                  <div style={{height: '35vh'}} />
+                  <div className="modal-footer">
+                    <div className="divider"></div>
+                    <div className="col offset-s6 s6">
+                      <a
+                        onClick={() => {
+                          this.setState({editRevModalWhow: false});
+                          //enviar todo otra vez
+                          $('#editRevModal').modal('close');
+                        }}
+                        className="waves-effect right waves-green green btn"
+                      >
+                        Aceptar
+                      </a>
+                    </div>
+                  </div>
+              </div>
+            </div>
+
           </main>
 
           {/* Barra de nav */}
@@ -263,6 +422,8 @@ function mapStateToProps(state){
     formValue: state.form.editProjectForm,
     projectDetail: state.projectDetail,
     newStage: state.newStage,
+    newRev: state.newRev,
+    editRevModal: state.editRevModal,
     projectUsers: state.projectUsers,
     initialValues: {
       name: state.projectDetail.name,

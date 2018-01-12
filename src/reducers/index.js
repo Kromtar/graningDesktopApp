@@ -8,9 +8,13 @@ import clients from './clients';
 import projects from './projects';
 import window_ProjectTab from './window_ProjectTab';
 import projectDetail from './projectDetail';
+import projectDetailStatic from './projectDetailStatic';
 import projectUsers from './projectUsers';
 import newStage from './newStage';
 import deleteStageList from './deleteStageList';
+import newRev from './newRev';
+import deleteRevList from './deleteRevList';
+import editRev from './editRev';
 
 export default combineReducers({
   test: test,
@@ -21,7 +25,11 @@ export default combineReducers({
   form: reduxForm,
   window_ProjectTab: window_ProjectTab,
   projectDetail: projectDetail,
+  projectDetailStatic: projectDetailStatic,
   projectUsers: projectUsers,
   newStage: newStage,
-  deleteStageList: deleteStageList
+  deleteStageList: deleteStageList,
+  newRev: newRev,
+  deleteRevList: deleteRevList,
+  editRev: editRev,
 });

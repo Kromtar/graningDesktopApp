@@ -1,5 +1,21 @@
 import axios from 'axios';
-import { FETCH_PROJECTS, WINDOWPROJECTTAB, FETCH_PROJECTDETAIL, FETCH_PROJECT_USERS, NEW_STAGE, DELETE_TEMP_STAGE, ADD_STAEGEID_FOR_DELETE } from './types';
+import _ from 'lodash';
+import {
+  FETCH_PROJECTS,
+  WINDOWPROJECTTAB,
+  FETCH_PROJECTDETAIL,
+  FETCH_PROJECTDETAIL_STATIC,
+  FETCH_PROJECT_USERS,
+  NEW_STAGE,
+  DELETE_TEMP_STAGE,
+  ADD_STAEGEID_FOR_DELETE,
+  NEW_REV,
+  DELETE_TEMP_REV,
+  ADD_REVID_FOR_DELETE,
+  NEW_EDIT_REV,
+  UPDATE_EDIT_REV_MODAL
+} from './types';
+
 const electron = window.require("electron");
 
 //Consulta a la API por la lista de todos los proyectos
@@ -63,6 +79,7 @@ export const getProjectDetail = (data) => async (dispatch, getState) =>{
         console.log(resP.data);
 
         dispatch({ type: FETCH_PROJECTDETAIL, payload: resP.data });
+        dispatch({ type: FETCH_PROJECTDETAIL_STATIC, payload: resP.data });
 
         const resU = await axios.get(`${getState().apiUrl}api/getClientsFromProject`, { headers: { auth: token, id: data } });
 
@@ -104,7 +121,6 @@ export const editProjectGeneral = (id, data) => async (dispatch, getState) =>{
 
 //Añade temporalmente una nueva estapa
 export const tempNewStage = (stageName, tempId) => (dispatch) => {
-  console.log(stageName);
   dispatch({ type: NEW_STAGE, payload: {name: stageName, tempId: tempId} });
 };
 
@@ -151,7 +167,6 @@ export const deleteStageFromProject = (idProject) => async (dispatch, getState) 
       })
   }).then( async function(token){
       try {
-
         //TODO: Manejo de consultas fallidas ?
         await axios.put(`${getState().apiUrl}api/deleteStageFromProject`, getState().deleteStageList, { headers: { auth: token, id: idProject } });
 
@@ -165,11 +180,104 @@ export const deleteStageFromProject = (idProject) => async (dispatch, getState) 
   });
 };
 
-
-//camiar nombre de etapa del proyecto
-
 //añadir rev a una etapa nueva o antigua
+export const tempNewRev = (data, tempId ,stageId ) => (dispatch) => {
+  dispatch({ type: NEW_REV, payload: {data: data, tempId: tempId, stageId: stageId} });
+};
 
-//eliminar rev de una etapa nueva o antigua
+export const addRevToProject = (id) => async (dispatch, getState) =>{
+  new Promise(resolve => {
+      electron.ipcRenderer.send('getToken')
+      electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+      })
+  }).then( async function(token){
+      try {
+        const data = getState().newRev;
+        console.log(data);
 
-//editar rev de una etapa nueva o antogua
+        const revsWhitoutTempId =_.map(data, e => _.pick(e, ['data', 'stageId']));
+
+        //TODO: Manejo de consultas fallidas ?
+        await axios.put(`${getState().apiUrl}api/addRevsToProject`, revsWhitoutTempId, { headers: { auth: token, id: id } });
+
+      } catch (err) {
+        //TODO: Manejo de error con mensaje
+        console.log('Error en peticion', err);
+      }
+  }).catch(function(err){
+    //TODO:Error al consultar a electron
+    console.log('Error interactuando con electron', err);
+  });
+};
+
+//Elimina una rev temporal
+export const deleteTempRev = (tempId) => (dispatch) => {
+  dispatch({ type: DELETE_TEMP_REV , payload: tempId });
+};
+
+//añade id de rev para ser eliminadas a un temporal
+export const addRevidForDelete = (idRev, IdStage) => (dispatch, getState) =>{
+  dispatch({ type: ADD_REVID_FOR_DELETE , payload: {idStage: IdStage, idRev: idRev} });
+};
+
+//elimina rev de un proyecto
+export const deleteRevFromProject = (idProject) => async (dispatch, getState) =>{
+  new Promise(resolve => {
+      electron.ipcRenderer.send('getToken')
+      electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+      })
+  }).then( async function(token){
+      try {
+        //TODO: Manejo de consultas fallidas ?
+        await axios.put(`${getState().apiUrl}api/deleteRevFromProject`, getState().deleteRevList, { headers: { auth: token, id: idProject } });
+
+      } catch (err) {
+        //TODO: Manejo de error con mensaje
+        console.log('Error en peticion', err);
+      }
+  }).catch(function(err){
+    //TODO:Error al consultar a electron
+    console.log('Error interactuando con electron', err);
+  });
+};
+
+//añade id de rev para ser editada
+export const addRevForEdit = (idRev, IdStage,stageIndex,revIndex, data) => (dispatch, getState) =>{
+  dispatch({ type: NEW_EDIT_REV , payload: {
+    idStage: IdStage,
+    idRev: idRev,
+    stageIndex: stageIndex,
+    revIndex: revIndex,
+    data: data,
+    originalData: getState().projectDetail}
+  });
+};
+
+
+//editar rev de una etapa antigua
+export const editRevsFromProyect = (idProject) => async (dispatch, getState) =>{
+  new Promise(resolve => {
+      electron.ipcRenderer.send('getToken')
+      electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+      })
+  }).then( async function(token){
+      try {
+        //TODO: Manejo de consultas fallidas ?
+        await axios.put(`${getState().apiUrl}api/editRevFromProject`, getState().editRev, { headers: { auth: token, id: idProject } });
+
+      } catch (err) {
+        //TODO: Manejo de error con mensaje
+        console.log('Error en peticion', err);
+      }
+  }).catch(function(err){
+    //TODO:Error al consultar a electron
+    console.log('Error interactuando con electron', err);
+  });
+};
+
+//camiar nombre de etapa antigua
+
+//añadir rev a etapa temporal**cuestioable

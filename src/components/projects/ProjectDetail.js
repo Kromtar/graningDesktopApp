@@ -16,7 +16,7 @@ class ProjectDetail extends Component {
   }
 
   badgeRender(){
-    if(this.props.projectDetail.finished){
+    if(this.props.projectDetailStatic.finished){
       return (
         <span style={{marginTop: '5px'}} className="new badge green" data-badge-caption=" Proyecto finalizado" />
       );
@@ -28,8 +28,8 @@ class ProjectDetail extends Component {
   }
 
   renderCollapsible(){
-    if(typeof(this.props.projectDetail._stage) !== "undefined"){
-      if(this.props.projectDetail._stage.length > 0){
+    if(typeof(this.props.projectDetailStatic._stage) !== "undefined"){
+      if(this.props.projectDetailStatic._stage.length > 0){
         return (
           <ul id="collapsible" className="collapsible popout" data-collapsible="accordion">
             {this.renderProjectStage()}
@@ -41,7 +41,7 @@ class ProjectDetail extends Component {
   }
 
   renderProjectStage(){
-    return _.map(this.props.projectDetail._stage, stage => {
+    return _.map(this.props.projectDetailStatic._stage, stage => {
       return (
           <li key={stage._id}>
             <div className="collapsible-header"><i className="material-icons">assistant_photo</i>{stage.name}</div>
@@ -60,13 +60,13 @@ class ProjectDetail extends Component {
       return _.map(stage._review, review => {
         return (
           <div key={review._id}>
-            <div className="col s4">
+            <div className="col s2">
              <p><b>{review.name}</b></p>
            </div>
-           <div className="col s4">
+           <div className="col s5">
              <p>Fecha entrega: {review.companytoclientdate ? this.dateFormat(review.companytoclientdate) : 'Fecha pendiente'}</p>
            </div>
-           <div className="col s4">
+           <div className="col s5">
              <p>Fecha correccion: {review.clienttocompany ? this.dateFormat(review.clienttocompany) : 'Fecha pendiente'}</p>
            </div>
          </div>
@@ -119,7 +119,7 @@ class ProjectDetail extends Component {
               <div className="card blue-grey darken-1">
                 <div className="card-content white-text" style={{paddingBottom: '2px', paddingTop: '10px'}}>
                   <span className="card-title">
-                    Detalles del Proyecto   Nº {this.props.projectDetail.internalcode}
+                    Detalles del Proyecto   Nº {this.props.projectDetailStatic.internalcode}
                     {this.badgeRender()}
                   </span>
                 </div>
@@ -132,15 +132,15 @@ class ProjectDetail extends Component {
                   <div className="row z-depth-1" style={{marginLeft: '10px', marginRight: '10px'}}>
 
                     <div className="col s6">
-                      <p><b>Nombre:  </b>{this.props.projectDetail.name}</p>
-                      <p><b>Nº Proyecto:  </b>{this.props.projectDetail.proyectnumber}</p>
-                      <p><b>Nº Contrato:  </b>{this.props.projectDetail.contractnumber}</p>
-                      <p><b>Nº Orden de compra:  </b>{this.props.projectDetail.purchaseordernumber}</p>
+                      <p><b>Nombre:  </b>{this.props.projectDetailStatic.name}</p>
+                      <p><b>Nº Proyecto:  </b>{this.props.projectDetailStatic.proyectnumber}</p>
+                      <p><b>Nº Contrato:  </b>{this.props.projectDetailStatic.contractnumber}</p>
+                      <p><b>Nº Orden de compra:  </b>{this.props.projectDetailStatic.purchaseordernumber}</p>
                     </div>
                     <div className="col s6">
-                      <p><b>Fecha inicio proyecto:  </b>{this.props.projectDetail.openprojectdate ? this.dateFormat(this.props.projectDetail.openprojectdate) : 'Pendiente'}</p>
-                      <p><b>Fecha cierre proyecto:  </b>{this.props.projectDetail.closeprojectdate ? this.dateFormat(this.props.projectDetail.closeprojectdate) : 'Pendiente'}</p>
-                      <p><b>Plazo (en dias):  </b>{this.props.projectDetail.term}</p>
+                      <p><b>Fecha inicio proyecto:  </b>{this.props.projectDetailStatic.openprojectdate ? this.dateFormat(this.props.projectDetailStatic.openprojectdate) : 'Pendiente'}</p>
+                      <p><b>Fecha cierre proyecto:  </b>{this.props.projectDetailStatic.closeprojectdate ? this.dateFormat(this.props.projectDetailStatic.closeprojectdate) : 'Pendiente'}</p>
+                      <p><b>Plazo (en dias):  </b>{this.props.projectDetailStatic.term}</p>
                     </div>
 
                   </div>
@@ -209,7 +209,7 @@ class ProjectDetail extends Component {
 
 function mapStateToProps(state){
   return {
-    projectDetail: state.projectDetail,
+    projectDetailStatic: state.projectDetailStatic,
     projectUsers: state.projectUsers
   };
 };

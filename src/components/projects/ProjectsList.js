@@ -29,9 +29,12 @@ class ProjectsList extends Component {
         <div>
           <NewProjectContent
             onProjectSubmit={ (data) => {
-              this.props.createNewProject(data);
+              this.props.createNewProject(data).then(() => {
+                this.props.fetchProjects();
+              });
               $('#newProjectModal').modal('close');
               this.setState({ showNewProject: false });    //Para que el contenido del form se limpie
+              this.forceUpdate();
             }}
             onClose={() => {
               this.setState({ showNewProject: false });  //Para que el contenido del form se limpie
