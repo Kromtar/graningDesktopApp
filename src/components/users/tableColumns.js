@@ -36,17 +36,6 @@ const columns = [{
       style={filterStyle}
     />
   )
-}, {
-  Heder: 'Button',
-  maxWidth: 120,
-  sortable: false,
-  filterable: false,
-  Cell: row => (
-    <a className="waves-effect waves-light btn" style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small'}}>
-      <i className="material-icons right">visibility</i>
-      Ver mas
-    </a>
-  )
 }]
 
 export default columns;

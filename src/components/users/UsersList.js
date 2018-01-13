@@ -52,6 +52,22 @@ class UsersList extends Component {
 
     const data = this.props.clients;
 
+
+    if(tableColumns.length <= 3){
+      tableColumns.push({
+        Heder: 'Button',
+        maxWidth: 120,
+        accessor: '_id',
+        sortable: false,
+        filterable: false,
+        Cell: row => (
+          <a onClick={() => this.props.getClientDetail(row.value)} className="waves-effect waves-light btn" style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small'}}>
+            <i className="material-icons right">visibility</i>
+            Ver mas
+          </a>
+        )})
+    }
+
     return (
       <div className="container" style={{ marginTop:  '30px'}}>
 

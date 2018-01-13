@@ -1,5 +1,11 @@
 import axios from 'axios';
-import { LOGIN_USER, FECTH_CLIENTS } from './types';
+import {
+  LOGIN_USER,
+  FECTH_CLIENTS,
+  WINDOWCLIENTTAB,
+  FETCH_CLIENTDETAIL_STATIC,
+  FETCH_CLIENTDETAIL
+} from './types';
 const electron = window.require("electron");
 
 //Login de Usuario a la API
@@ -83,6 +89,54 @@ export const createNewUser = (data) => async (dispatch, getState) =>{
       try {
         //TODO: Manejo de consultas fallidas ?
         const res = await axios.post(`${getState().apiUrl}api/createUser`, data.values, { headers: { auth: token } });
+      } catch (err) {
+        //TODO: Manejo de error con mensaje
+        console.log('Error en peticion', err);
+      }
+  }).catch(function(err){
+    //TODO:Error al consultar a electron
+    console.log('Error interactuando con electron', err);
+  });
+};
+
+//Busca el detalle de un projecto
+export const getClientDetail = (data) => async (dispatch, getState) =>{
+  new Promise(resolve => {
+      electron.ipcRenderer.send('getToken')
+      electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+      })
+  }).then( async function(token){
+      try {
+        //TODO: Manejo de consultas fallidas ?
+        const resU = await axios.get(`${getState().apiUrl}api/getClientDetail`, { headers: { auth: token, id: data } });
+
+        dispatch({ type: FETCH_CLIENTDETAIL, payload: resU.data });
+        dispatch({ type: FETCH_CLIENTDETAIL_STATIC, payload: resU.data });
+        dispatch({ type: WINDOWCLIENTTAB, payload: 'detail' });
+
+      } catch (err) {
+        //TODO: Manejo de error con mensaje
+        console.log('Error en peticion', err);
+      }
+  }).catch(function(err){
+    //TODO:Error al consultar a electron
+    console.log('Error interactuando con electron', err);
+  });
+};
+
+//Añade un projecto a un usuario
+export const addProjectToClient = (data) => async (dispatch, getState) =>{
+  new Promise(resolve => {
+      electron.ipcRenderer.send('getToken')
+      electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+      })
+  }).then( async function(token){
+      try {
+        //TODO: Manejo de consultas fallidas ?
+        const res = await axios.put(`${getState().apiUrl}api/addProjectToClient`, data, { headers: { auth: token } });
+
       } catch (err) {
         //TODO: Manejo de error con mensaje
         console.log('Error en peticion', err);

@@ -37,7 +37,7 @@ const columns = [{
     )
   },{
     Header: 'Fecha de inicio',
-    maxWidth: 100,
+    maxWidth: 120,
     id: 'openprojectdate',
     accessor: d => {
       if(d.openprojectdate){

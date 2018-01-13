@@ -15,6 +15,9 @@ import deleteStageList from './deleteStageList';
 import newRev from './newRev';
 import deleteRevList from './deleteRevList';
 import editRev from './editRev';
+import window_ClientTab from './window_ClientTab';
+import clientDetail from './clientDetail';
+import clientDetailStatic from './clientDetailStatic';
 
 export default combineReducers({
   test: test,
@@ -32,4 +35,7 @@ export default combineReducers({
   newRev: newRev,
   deleteRevList: deleteRevList,
   editRev: editRev,
+  window_ClientTab: window_ClientTab,
+  clientDetail: clientDetail,
+  clientDetailStatic: clientDetailStatic
 });

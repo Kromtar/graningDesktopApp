@@ -87,13 +87,13 @@ class ProjectDetail extends Component {
             <div className="row" style={{marginBottom: '0px'}}>
               <div className="col s6">
                 <p>Nombre: {field.name} {field.surname}</p>
-                <p>Email: {field.email}    Telefono 1: {field.phone1}</p>
+                <p>Email: {field.email}</p>
               </div>
               <div className="col s6">
                 <p>Compañia: {field.company}</p>
                 <a onClick={() => console.log('Cargar info de usuario')} className="waves-effect waves-light btn" style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small'}}>
                   <i className="material-icons right">account_circle</i>
-                  Ver Cliente
+                  Ver mas del Cliente
                 </a>
               </div>
             </div>
@@ -193,7 +193,7 @@ class ProjectDetail extends Component {
                 </div>
                 <div className="col s6 right-align">
                   <a onClick={() => this.props.windowProjectTabViewEdit()} className="waves-effect orange waves-light btn">
-                    Editar
+                    Editar informacion del proyecto
                     <i className="material-icons right">mode_edit</i>
                   </a>
                 </div>

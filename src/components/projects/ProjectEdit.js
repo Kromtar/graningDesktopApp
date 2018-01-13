@@ -254,7 +254,7 @@ class ProjectEdit extends Component {
     return(
       <div>
 
-        <form id="userForm" onSubmit={
+        <form id="projectEditForm" onSubmit={
           (this.props.handleSubmit(() => {
 
             //Procesa la info general

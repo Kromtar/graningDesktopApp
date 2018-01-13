@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 import * as actions from '../actions';
 
-import UsersList from './users/UsersList';
 import ProjectsTab from './projects/ProjectsTab';
+import ClientsTab from './users/ClientsTab';
 
 class MainPanel extends Component {
 
@@ -33,7 +33,7 @@ class MainPanel extends Component {
               <li className="tab col s2"><a href="#projects">Proyectos</a></li>
             </ul>
           </div>
-          <div id="clients" className="col s12"><UsersList /></div>
+          <div id="clients" className="col s12"><ClientsTab /></div>
           <div id="projects" className="col s12"><ProjectsTab /></div>
         </div>
       );

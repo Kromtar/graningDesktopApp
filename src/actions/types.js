@@ -20,3 +20,6 @@ export const CLEAR_REVID_FOR_DELETE = 'clearRevidForDelete';
 export const NEW_EDIT_REV = 'NewEditRev';
 export const COPY_PROJECTDETAILSTATIC_TO_PROJECTDETAIL = 'CopyProjectdetailstaticToProjectdetail';
 export const CLEAR_EDIT_REV = 'ClearEditRev';
+export const WINDOWCLIENTTAB = 'windowClientTab';
+export const FETCH_CLIENTDETAIL_STATIC = 'fetchClientedetailStatic';
+export const FETCH_CLIENTDETAIL = 'fetchClientedetail';
