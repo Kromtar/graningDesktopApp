@@ -2,6 +2,7 @@ const path = require('path');
 const url = require('url');
 const {app, BrowserWindow, ipcMain, Menu} = require('electron');
 const Store = require('electron-store');
+const keys = require('./config/keys');
 
 //Dropbox
 const TransformStream = require('./dropboxControllers/transform');
@@ -11,7 +12,7 @@ const fs = require('fs');
 const Dropbox = require('dropbox');
 
 //TODO: Obtener token por consulta a api
-const dropbox = new Dropbox({ accessToken: '' });
+const dropbox = new Dropbox({ accessToken: keys.dropboxApi });
 //Dropbox
 
 const store = new Store();

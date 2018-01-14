@@ -316,7 +316,7 @@ export const sendLinkProject = () => async (dispatch, getState) =>{
 
     const token = await getToken();
     const data = getState().window_UploadConsole.link;
-
+    
     const res = await axios.post(`${getState().apiUrl}api/addLinkToPtoject`, data, { headers: { auth: token } });
 
     dispatch({ type: WINDOWUPLOADCONSOLE, payload: {
