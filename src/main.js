@@ -11,7 +11,7 @@ const fs = require('fs');
 const Dropbox = require('dropbox');
 
 //TODO: Obtener token por consulta a api
-const dropbox = new Dropbox({ accessToken: 'hyF3lkIPCs8AAAAAAACTOxmrwDbLOObM-1Q2h3TgCj7X7lTa2z10DMSN8kswdJwf' });
+const dropbox = new Dropbox({ accessToken: '' });
 //Dropbox
 
 const store = new Store();
@@ -109,11 +109,6 @@ ipcMain.on('uploadFile', (event, fileInput, proyectId) => {
     let name = fileInput[0].name;
     let size = fileInput[0].size;
 
-    //console.log(file, proyectId);
-    //console.log(proyectId);
-    //console.log(name);
-    //console.log(path);
-    //console.log(size);
     mainWindow.webContents.send('openUploadFileWindow');
 
     let file = fs.createReadStream(path);
@@ -124,7 +119,8 @@ ipcMain.on('uploadFile', (event, fileInput, proyectId) => {
       "/testApi2/" + proyectId + "/" + proyectId + ".zip",
       dropbox,
       mainWindow,
-      proyectId
+      proyectId,
+      name
     );
 
     dropbox.filesDeleteV2({path: '/testApi2/'+proyectId }).then((res) => {

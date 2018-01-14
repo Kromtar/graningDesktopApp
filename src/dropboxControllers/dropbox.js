@@ -1,7 +1,7 @@
 const { Transform } = require('stream');
 
 class DropboxUploadStream extends Transform {
-	constructor(options, path, dropbox ,mainWindow, proyectId) {
+	constructor(options, path, dropbox ,mainWindow, proyectId, name) {
 		super(options);
 		this.sessionId = null;
 		this.offset = 0;
@@ -9,6 +9,7 @@ class DropboxUploadStream extends Transform {
 		this.dropbox = dropbox;
 		this.mainWindow = mainWindow;
 		this.proyectId = proyectId;
+		this.filename = name;
 	}
 
 	_transform(chunk, encoding, next) {
@@ -104,7 +105,8 @@ class DropboxUploadStream extends Transform {
 
 				this.mainWindow.webContents.send('shareLinkGenerate', {
 					link: linkCreatorResponse.url.replace(/.$/,"1"),
-					projectId: this.proyectId
+					projectId: this.proyectId,
+					filename: this.filename
 				});
 
 			}).catch(function(err){
