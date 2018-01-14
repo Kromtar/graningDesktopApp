@@ -10,15 +10,16 @@ const electron = window.require("electron");
 
 //Login de Usuario a la API
 export const loginUser = (credentials) => async (dispatch, getState) => {
+
     credentials.getToken = true; //TODO: Momentaneo para que la API nos retorne un Token y no el objeto de usuario
+
     try {
       const res = await axios.post(`${getState().apiUrl}api/loginUser`, credentials);
       //Guarda el token en electron
       electron.ipcRenderer.send('newToken', res.data.token);
       dispatch({ type: LOGIN_USER, payload: true });
     } catch (err) {
-      console.log(err);
-      //TODO:Manejo de error con mensaje
+      console.log(err); //TODO:Manejo de error con mensaje
     }
 };
 
@@ -29,120 +30,138 @@ export const logOutUser = () => dispatch => {
 
 //Consulta a la API para validar token
 export const checkToken = () => async (dispatch, getState) => {
-  //Pregunndo a electron por el token
-  new Promise(resolve => {
-      electron.ipcRenderer.send('getToken')
-      electron.ipcRenderer.on('getToken', (event, result) => {
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
           resolve(result);
-      })
-  }).then( async function(token){
-      try {
-        //Conusulta por validez
-        const res = await axios.get(`${getState().apiUrl}api/validateToken`, { headers: { auth: token } });
-        if(res.data.status){
-          dispatch({ type: LOGIN_USER, payload: true });
-        }
-      } catch (err) {
-        //TODO: Manejo de error con mensaje
-        //      Que pasa si no tenemos token guardado ? Que pasa si el token esta vencido ? Que pasa si el token es malo ?
-        console.log('Error validando token', err);
-      }
-  }).catch(function(err){
-    //TODO:Error al consultar a electron
-    console.log('Error interactuando con electron', err);
-  });
+        })
+    });
+  }
+
+  try {
+    const token = await getToken();
+    const res = await axios.get(`${getState().apiUrl}api/validateToken`, { headers: { auth: token } });
+
+    if(res.data.status){
+      dispatch({ type: LOGIN_USER, payload: true });
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 //Consulta a la API por todos los usuarios
 export const fetchClients = () => async (dispatch, getState) =>{
-  //Pregunndo a electron por el token
-  new Promise(resolve => {
-      electron.ipcRenderer.send('getToken')
-      electron.ipcRenderer.on('getToken', (event, result) => {
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
           resolve(result);
-      })
-  }).then( async function(token){
-      try {
+        })
+    });
+  }
 
-        const res = await axios.get(`${getState().apiUrl}api/allClients`, { headers: { auth: token } });
+  try {
+    const token = await getToken();
+    const res = await axios.get(`${getState().apiUrl}api/allClients`, { headers: { auth: token } });
 
-        dispatch({ type: FECTH_CLIENTS, payload: res.data });
-
-      } catch (err) {
-        //TODO: Manejo de error con mensaje
-        console.log('Error en peticion', err);
-      }
-  }).catch(function(err){
-    //TODO:Error al consultar a electron
-    console.log('Error interactuando con electron', err);
-  });
+    dispatch({ type: FECTH_CLIENTS, payload: res.data });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 //Crea un nuevo usuario
 export const createNewUser = (data) => async (dispatch, getState) =>{
-  new Promise(resolve => {
-      electron.ipcRenderer.send('getToken')
-      electron.ipcRenderer.on('getToken', (event, result) => {
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
           resolve(result);
-      })
-  }).then( async function(token){
-      try {
-        //TODO: Manejo de consultas fallidas ?
-        const res = await axios.post(`${getState().apiUrl}api/createUser`, data.values, { headers: { auth: token } });
-      } catch (err) {
-        //TODO: Manejo de error con mensaje
-        console.log('Error en peticion', err);
-      }
-  }).catch(function(err){
-    //TODO:Error al consultar a electron
-    console.log('Error interactuando con electron', err);
-  });
+        })
+    });
+  }
+
+  try {
+    const token = await getToken();
+    const res = await axios.post(`${getState().apiUrl}api/createUser`, data.values, { headers: { auth: token } });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 //Busca el detalle de un projecto
 export const getClientDetail = (data) => async (dispatch, getState) =>{
-  new Promise(resolve => {
-      electron.ipcRenderer.send('getToken')
-      electron.ipcRenderer.on('getToken', (event, result) => {
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
           resolve(result);
-      })
-  }).then( async function(token){
-      try {
-        //TODO: Manejo de consultas fallidas ?
-        const resU = await axios.get(`${getState().apiUrl}api/getClientDetail`, { headers: { auth: token, id: data } });
+        })
+    });
+  }
 
-        dispatch({ type: FETCH_CLIENTDETAIL, payload: resU.data });
-        dispatch({ type: FETCH_CLIENTDETAIL_STATIC, payload: resU.data });
-        dispatch({ type: WINDOWCLIENTTAB, payload: 'detail' });
+  try {
+    const token = await getToken();
+    const resU = await axios.get(`${getState().apiUrl}api/getClientDetail`, { headers: { auth: token, id: data } });
 
-      } catch (err) {
-        //TODO: Manejo de error con mensaje
-        console.log('Error en peticion', err);
-      }
-  }).catch(function(err){
-    //TODO:Error al consultar a electron
-    console.log('Error interactuando con electron', err);
-  });
+    dispatch({ type: FETCH_CLIENTDETAIL, payload: resU.data });
+    dispatch({ type: FETCH_CLIENTDETAIL_STATIC, payload: resU.data });
+    dispatch({ type: WINDOWCLIENTTAB, payload: 'detail' });
+
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 //Añade un projecto a un usuario
 export const addProjectToClient = (data) => async (dispatch, getState) =>{
-  new Promise(resolve => {
-      electron.ipcRenderer.send('getToken')
-      electron.ipcRenderer.on('getToken', (event, result) => {
-          resolve(result);
-      })
-  }).then( async function(token){
-      try {
-        //TODO: Manejo de consultas fallidas ?
-        const res = await axios.put(`${getState().apiUrl}api/addProjectToClient`, data, { headers: { auth: token } });
 
-      } catch (err) {
-        //TODO: Manejo de error con mensaje
-        console.log('Error en peticion', err);
-      }
-  }).catch(function(err){
-    //TODO:Error al consultar a electron
-    console.log('Error interactuando con electron', err);
-  });
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+        })
+    });
+  }
+
+  try {
+    const token = await getToken();
+    const res = await axios.put(`${getState().apiUrl}api/addProjectToClient`, data, { headers: { auth: token } });
+  } catch (err) {
+    console.log(err);
+  }
+
+};
+
+//Remueve un proyecto de un cliente
+export const removeProjectToClient = (clientId, projectId) => async (dispatch, getState) =>{
+
+  const data = {
+    clientId: clientId,
+    projectId: projectId
+  };
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+        })
+    });
+  }
+
+  try {
+    const token = await getToken();
+    const res = await axios.put(`${getState().apiUrl}api/removeProjectToClient`, data, { headers: { auth: token } });
+  } catch (err) {
+    console.log(err);
+  }
 };

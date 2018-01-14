@@ -13,7 +13,11 @@ import {
   DELETE_TEMP_REV,
   ADD_REVID_FOR_DELETE,
   NEW_EDIT_REV,
-  UPDATE_EDIT_REV_MODAL
+  UPDATE_EDIT_REV_MODAL,
+  ADD_FILE,
+  REMOVE_FILE,
+  WINDOWUPLOADCONSOLE,
+  WINDOWUPLOADCONSOLE_RESET
 } from './types';
 
 const electron = window.require("electron");
@@ -75,8 +79,6 @@ export const getProjectDetail = (data) => async (dispatch, getState) =>{
       try {
         //TODO: Manejo de consultas fallidas ?
         const resP = await axios.get(`${getState().apiUrl}api/getProjectDetail`, { headers: { auth: token, id: data } });
-
-        console.log(resP.data);
 
         dispatch({ type: FETCH_PROJECTDETAIL, payload: resP.data });
         dispatch({ type: FETCH_PROJECTDETAIL_STATIC, payload: resP.data });
@@ -194,7 +196,6 @@ export const addRevToProject = (id) => async (dispatch, getState) =>{
   }).then( async function(token){
       try {
         const data = getState().newRev;
-        console.log(data);
 
         const revsWhitoutTempId =_.map(data, e => _.pick(e, ['data', 'stageId']));
 
@@ -281,3 +282,57 @@ export const editRevsFromProyect = (idProject) => async (dispatch, getState) =>{
 //camiar nombre de etapa antigua
 
 //añadir rev a etapa temporal**cuestioable
+
+//Añedi un archivo para subir
+export const addFile = (video) => dispatch => {
+  dispatch({ type: ADD_FILE, payload: { ...video } });
+};
+
+//Remueve el archivo para subir
+export const removeFile = () => dispatch => {
+  dispatch({ type: REMOVE_FILE});
+};
+
+//Inicia la subida del nuevo Fichero
+export const uploadNewFile = (proyectId) => (dispatch, getState) => {
+  const fileInfo = getState().fileSelected;
+  electron.ipcRenderer.send('uploadFile', fileInfo, proyectId);
+  dispatch({ type: WINDOWUPLOADCONSOLE, payload: { fileSize: fileInfo[0].size }});
+};
+
+//Guarda el link de descarga en el proyecto
+export const sendLinkProject = () => async (dispatch, getState) =>{
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+        })
+    });
+  }
+
+  try {
+
+    const token = await getToken();
+    const data = getState().window_UploadConsole.link;
+
+    const res = await axios.post(`${getState().apiUrl}api/addLinkToPtoject`, data, { headers: { auth: token } });
+
+    dispatch({ type: WINDOWUPLOADCONSOLE, payload: {
+      content: 'finished',
+      fileSize: '',
+      link: ''
+    }});
+
+    dispatch({ type: REMOVE_FILE });
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+//Cierra la ventana de fileUpload
+export const closeWindowUploadConsole = () => async (dispatch, getState) =>{
+  dispatch({ type: WINDOWUPLOADCONSOLE_RESET });
+}

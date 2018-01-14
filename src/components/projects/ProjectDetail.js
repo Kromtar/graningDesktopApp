@@ -108,6 +108,7 @@ class ProjectDetail extends Component {
   }
 
   render(){
+
     return(
       <div>
 
@@ -177,6 +178,9 @@ class ProjectDetail extends Component {
                   </div>
 
               </div>
+
+
+
 
             </main>
 

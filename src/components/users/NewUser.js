@@ -4,7 +4,7 @@ import $ from 'jquery';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 
-import InputField from '../aux/InputField';
+import InputField from '../aux/inputField';
 import ReviewNewUser from './ReviewNewUser';
 import validateUserForm from './validateUserForm';
 

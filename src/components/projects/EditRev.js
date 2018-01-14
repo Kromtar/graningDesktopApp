@@ -107,7 +107,6 @@ class EditRev extends Component {
 };
 
 function mapStateToProps(state){
-  console.log(state);
   return {
     projectDetail: state.projectDetail,
   };

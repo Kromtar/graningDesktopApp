@@ -4,20 +4,28 @@ import * as actions from '../../actions';
 import $ from 'jquery';
 
 import ReactTable from 'react-table';
-
 import tableAddProjectsUserColumns from './tableAddProjectsUserColumns';
 
 class AddProjectToClient extends Component {
   render(){
 
     var filterProjects = [];
-    //filtramos los projectos que ya tiene el usuario
-    for(var keyA in this.props.projects){
+
+    //filtramos los projectos que ya tiene el usuario, si es que tiene
+    if(this.props.clientDetailStatic._projects.length > 0){
+      for(var keyA in this.props.projects){
+        var clientHasProject = false;
         for(var keyB in this.props.clientDetailStatic._projects){
-          if(this.props.projects[keyA]._id !== this.props.clientDetailStatic._projects[keyB]._id){
-            filterProjects.push(this.props.projects[keyA]);
+          if(this.props.projects[keyA]._id === this.props.clientDetailStatic._projects[keyB]._id){
+            clientHasProject = true;
           }
         }
+        if(!clientHasProject){
+          filterProjects.push(this.props.projects[keyA]);
+        }
+      }
+    }else{
+      filterProjects = this.props.projects;
     }
 
     if(tableAddProjectsUserColumns.length <= 5){
@@ -28,11 +36,15 @@ class AddProjectToClient extends Component {
         accessor: '_id',
         filterable: false,
         Cell: row => (
-          <a onClick={() => {
-            this.props.addProjectToClient({clientId: this.props.clientDetailStatic._id,projectId: row.value});
-            //recarga
-            $("#ProjectClienteRelationModal").modal('close');
-          }} className="waves-effect waves-light btn" style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small'}}>
+          <a
+            onClick={async () => {
+              await this.props.addProjectToClient({clientId: this.props.clientDetailStatic._id,projectId: row.value});
+              await this.props.getClientDetail(this.props.clientDetailStatic._id);
+              this.props.onClose();
+            }}
+            className="waves-effect waves-light btn"
+            style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small'}}
+          >
             <i className="material-icons right">add</i>
             Agregar
           </a>
@@ -56,7 +68,11 @@ class AddProjectToClient extends Component {
         <div className="modal-footer">
           <div className="divider"></div>
           <div className="col s6">
-            <a href="#!" className="modal-action modal-close waves-effect waves-green btn-flat">Cerrar</a>
+            <a
+              onClick={() => this.props.onClose()}
+              className="modal-action modal-close waves-effect waves-green btn-flat">
+              Cerrar
+            </a>
           </div>
         </div>
       </div>

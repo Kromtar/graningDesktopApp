@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import ProjectsList from './ProjectsList';
 import ProjectDetail from './ProjectDetail';
 import ProjectEdit from './ProjectEdit';
+import ProjectFileUplaod from './ProjectFileUplaod';
 
 class ProjectsTab extends Component {
 
@@ -13,9 +14,16 @@ class ProjectsTab extends Component {
         <ProjectsList />
       );
     } else if (this.props.window_ProjectTab === 'detail'){
-      return (
-        <ProjectDetail />
-      );
+      if(this.props.window_UploadConsole.state === 'open'){
+        return (
+          <ProjectFileUplaod />
+        );
+      }else{
+        return (
+          <ProjectDetail />
+        );
+      }
+
     } else if (this.props.window_ProjectTab === 'edit'){
       return (
         <ProjectEdit />
@@ -34,7 +42,8 @@ class ProjectsTab extends Component {
 
   function mapStateToProps(state){
     return {
-      window_ProjectTab: state.window_ProjectTab
+      window_ProjectTab: state.window_ProjectTab,
+      window_UploadConsole: state.window_UploadConsole
     };
   };
 

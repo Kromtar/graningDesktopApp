@@ -4,8 +4,8 @@ import $ from 'jquery';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 
-import InputField from '../aux/InputField';
-import datePicker from '../aux/DatePicker';
+import InputField from '../aux/inputField';
+import datePicker from '../aux/datePicker';
 import ReviewNewProject from './ReviewNewProject';
 import validateProjectForm from './validateProjectForm';
 

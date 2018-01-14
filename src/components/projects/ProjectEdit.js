@@ -6,12 +6,13 @@ import * as actions from '../../actions';
 import { reduxForm, Field } from 'redux-form';
 import moment from 'moment';
 
-import datePicker from '../aux/DatePicker';
-import InputField from '../aux/InputField';
+import datePicker from '../aux/datePicker';
+import InputField from '../aux/inputField';
 import validateEditProjectForm from './validateEditProjectForm';
 import AddStage from './AddStage';
 import AddRev from './AddRev';
 import EditRev from './EditRev';
+import FileSelector from './FileSelector';
 
 
 class ProjectEdit extends Component {
@@ -248,7 +249,6 @@ class ProjectEdit extends Component {
     }
   }
 
-
   render(){
 
     return(
@@ -263,6 +263,11 @@ class ProjectEdit extends Component {
               this.props.addStageToProject(this.props.projectDetail._id).then(() => {
                 this.props.deleteStageFromProject(this.props.projectDetail._id).then(() => {
                   this.props.addRevToProject(this.props.projectDetail._id).then(() => {
+
+                      if(Object.keys(this.props.fileSelected).length > 0){
+                        this.props.uploadNewFile(this.props.projectDetail._id);
+                      }
+
                       this.props.editRevsFromProyect(this.props.projectDetail._id);
                       this.props.deleteRevFromProject(this.props.projectDetail._id);
                       this.props.getProjectDetail(this.props.projectDetail._id);
@@ -332,6 +337,20 @@ class ProjectEdit extends Component {
                 <div className="divider" style={{marginBottom: '5px'}}></div>
                   {this.renderCollapsibleTemp()}
                   {this.renderCollapsibleEdit()}
+                </div>
+
+              </div>
+
+              {/* Ficheros */}
+              <div className="row z-depth-1" style={{marginLeft: '10px', marginRight: '10px', paddingTop: '6px'}}>
+
+                <div className="col s12">
+                <p><b>Documentos del proyecto:</b></p>
+                <div className="divider" style={{marginBottom: '5px'}}></div>
+                  <div className="col s12 z-depth-1">
+                    Aqui va el fichero actual y el boton para borrarlo
+                  </div>
+                  <FileSelector />
                 </div>
 
               </div>
@@ -422,6 +441,7 @@ function mapStateToProps(state){
     formValue: state.form.editProjectForm,
     projectDetail: state.projectDetail,
     newStage: state.newStage,
+    fileSelected: state.fileSelected,
     newRev: state.newRev,
     editRevModal: state.editRevModal,
     projectUsers: state.projectUsers,

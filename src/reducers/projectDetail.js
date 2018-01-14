@@ -7,7 +7,6 @@ export default function(state = [] , action) {
     case FETCH_PROJECTDETAIL:
       return action.payload;
     case COPY_PROJECTDETAILSTATIC_TO_PROJECTDETAIL:
-      console.log('Copiando', action.payload);
       return action.payload;
     case NEW_EDIT_REV:
       return update(state, {

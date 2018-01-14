@@ -3,6 +3,17 @@ const url = require('url');
 const {app, BrowserWindow, ipcMain, Menu} = require('electron');
 const Store = require('electron-store');
 
+//Dropbox
+const TransformStream = require('./dropboxControllers/transform');
+const DropboxUploadStream = require('./dropboxControllers/dropbox');
+
+const fs = require('fs');
+const Dropbox = require('dropbox');
+
+//TODO: Obtener token por consulta a api
+const dropbox = new Dropbox({ accessToken: 'hyF3lkIPCs8AAAAAAACTOxmrwDbLOObM-1Q2h3TgCj7X7lTa2z10DMSN8kswdJwf' });
+//Dropbox
+
 const store = new Store();
 
 let mainWindow;
@@ -36,6 +47,7 @@ function createWindow(){
   const mainMenu = Menu.buildFromTemplate(menuTemplate);
 
   Menu.setApplicationMenu(mainMenu);
+
 }
 
 //Config ventana de configuracion
@@ -90,6 +102,50 @@ ipcMain.on('changeApiUrl', (event, url) => {
     mainWindow.webContents.send('newApiUrl', store.get('apiUrl'));
 });
 
+//sube un nuevo fichero
+ipcMain.on('uploadFile', (event, fileInput, proyectId) => {
+
+    let path = fileInput[0].path.replace(/([^:]\/)\/+/g, "$1");
+    let name = fileInput[0].name;
+    let size = fileInput[0].size;
+
+    //console.log(file, proyectId);
+    //console.log(proyectId);
+    //console.log(name);
+    //console.log(path);
+    //console.log(size);
+    mainWindow.webContents.send('openUploadFileWindow');
+
+    let file = fs.createReadStream(path);
+    const transformStream = new TransformStream({chunkSize: 8000 * 1024 /* ~8MB */});
+
+    const dropboxUpload = new DropboxUploadStream(
+      null,
+      "/testApi2/" + proyectId + "/" + proyectId + ".zip",
+      dropbox,
+      mainWindow,
+      proyectId
+    );
+
+    dropbox.filesDeleteV2({path: '/testApi2/'+proyectId }).then((res) => {
+      console.log('Fichero eliminado');
+    }).catch((err) => {
+      //console.log('Erorr eliminando fichero', err);
+    }).finally(() =>{
+
+      file.pipe(transformStream).pipe(dropboxUpload)
+    	.on('error', (err) => {
+    		console.log('Erorr subiendo fichero', err);
+        mainWindow.webContents.send('fileUpdateError');
+    	})
+    	.on('finish', () => {
+    		console.log('Fin de pipe');
+    	});
+
+    });
+
+
+});
 //--------------Menu--------------//
 
 //Template del menu

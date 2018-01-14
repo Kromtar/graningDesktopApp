@@ -6,7 +6,7 @@ import * as actions from '../../actions';
 import { reduxForm, Field } from 'redux-form';
 import moment from 'moment';
 
-import InputField from '../aux/InputField';
+import InputField from '../aux/inputField';
 
 class ClientEdit extends Component {
   render(){

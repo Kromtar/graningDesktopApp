@@ -18,6 +18,8 @@ import editRev from './editRev';
 import window_ClientTab from './window_ClientTab';
 import clientDetail from './clientDetail';
 import clientDetailStatic from './clientDetailStatic';
+import fileSelected from './fileSelected';
+import window_UploadConsole from './window_UploadConsole';
 
 export default combineReducers({
   test: test,
@@ -37,5 +39,7 @@ export default combineReducers({
   editRev: editRev,
   window_ClientTab: window_ClientTab,
   clientDetail: clientDetail,
-  clientDetailStatic: clientDetailStatic
+  clientDetailStatic: clientDetailStatic,
+  fileSelected: fileSelected,
+  window_UploadConsole: window_UploadConsole
 });
