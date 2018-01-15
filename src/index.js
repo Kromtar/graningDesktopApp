@@ -40,6 +40,7 @@ electron.ipcRenderer.on('endUploadFile', (event) => {
 });
 
 //Evento se ejecuta cunado se genera el link de descarga
+//TODO: Rediseñar el contenido de data (el cual trae el projectID necesarop para actulizar la db)
 electron.ipcRenderer.on('shareLinkGenerate', (event, data) => {
   console.log('Share link generate', data);
   store.dispatch({ type: WINDOWUPLOADCONSOLE, payload: {content: 'linkReady', link: data} });

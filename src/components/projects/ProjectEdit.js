@@ -249,6 +249,24 @@ class ProjectEdit extends Component {
     }
   }
 
+  renderDeleteFileButton(){
+    if(this.props.projectDetail.filename){
+      return (
+        <div className="col s6">
+          <a
+            onClick={() => {
+              this.props.addIdProjectForDeleteFile(this.props.projectDetail._id);
+              $('#actualFileDisplay').hide();
+            }}
+            style={{marginBottom: '7px'}}
+            className="waves-effect btn-flat right red white-text">
+            Eliminar el fichero actual
+          </a>
+        </div>
+      );
+    }
+  }
+
   render(){
 
     return(
@@ -266,6 +284,10 @@ class ProjectEdit extends Component {
 
                       if(Object.keys(this.props.fileSelected).length > 0){
                         this.props.uploadNewFile(this.props.projectDetail._id);
+                      }
+
+                      if(this.props.deleteFileFromProject !== ''){
+                        this.props.deleteFileFromproject();
                       }
 
                       this.props.editRevsFromProyect(this.props.projectDetail._id);
@@ -347,8 +369,13 @@ class ProjectEdit extends Component {
                 <div className="col s12">
                 <p><b>Documentos del proyecto:</b></p>
                 <div className="divider" style={{marginBottom: '5px'}}></div>
-                  <div className="col s12 z-depth-1">
-                    Aqui va el fichero actual y el boton para borrarlo
+                  <div id="actualFileDisplay" className="col s12 z-depth-1" style={{marginBottom: '25px'}}>
+                    <div style={{marginTop: '10px', marginBottom: '10px'}}>
+                      <div className="col s6">
+                        {this.props.projectDetail.filename ? 'Nombre del ultimo archivo subido: ' + this.props.projectDetail.filename : 'No hay documentos en este proyeco actualmente'}
+                      </div>
+                      {this.renderDeleteFileButton()}
+                    </div>
                   </div>
                   <FileSelector />
                 </div>

@@ -30,8 +30,10 @@ class ProjectFileUplaod extends Component {
 
   render(){
 
+      //TODO: Pasar a async y comprobar que recargue
       if(this.props.window_UploadConsole.content === 'linkReady'){
         this.props.sendLinkProject();
+        this.props.getProjectDetail(this.props.projectDetailStatic._id);
       }
 
       return(
@@ -64,7 +66,8 @@ class ProjectFileUplaod extends Component {
 
   function mapStateToProps(state){
     return {
-      window_UploadConsole: state.window_UploadConsole
+      window_UploadConsole: state.window_UploadConsole,
+      projectDetailStatic: state.projectDetailStatic
     };
   };
 

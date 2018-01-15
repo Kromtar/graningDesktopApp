@@ -8,7 +8,8 @@ import {
   CLEAR_EDIT_REV,
   WINDOWCLIENTTAB,
   WINDOWUPLOADCONSOLE_RESET,
-  REMOVE_FILE
+  REMOVE_FILE,
+  CLEAR_FILE_TO_DELETE
 } from './types';
 
 //Muestra la lista de proyectos dentro de la tab de proyectos
@@ -32,6 +33,7 @@ export const windowProjectTabViewEdit = () => (dispatch, getState) => {
     dispatch({ type: CLEAR_REVID_FOR_DELETE });
     dispatch({ type: CLEAR_EDIT_REV });
     dispatch({ type: REMOVE_FILE });
+    dispatch({ type: CLEAR_FILE_TO_DELETE });
     dispatch({ type: WINDOWUPLOADCONSOLE_RESET });
     dispatch({ type: COPY_PROJECTDETAILSTATIC_TO_PROJECTDETAIL, payload: getState().projectDetailStatic });
 };

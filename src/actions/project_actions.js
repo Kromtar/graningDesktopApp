@@ -17,7 +17,8 @@ import {
   ADD_FILE,
   REMOVE_FILE,
   WINDOWUPLOADCONSOLE,
-  WINDOWUPLOADCONSOLE_RESET
+  WINDOWUPLOADCONSOLE_RESET,
+  ADD_FILE_TO_DELETE
 } from './types';
 
 const electron = window.require("electron");
@@ -316,8 +317,9 @@ export const sendLinkProject = () => async (dispatch, getState) =>{
 
     const token = await getToken();
     const data = getState().window_UploadConsole.link;
-    
-    const res = await axios.post(`${getState().apiUrl}api/addLinkToPtoject`, data, { headers: { auth: token } });
+    const name = getState().fileSelected[0].name;
+
+    const res = await axios.post(`${getState().apiUrl}api/addLinkToPtoject`, {name, data}, { headers: { auth: token } });
 
     dispatch({ type: WINDOWUPLOADCONSOLE, payload: {
       content: 'finished',
@@ -336,3 +338,35 @@ export const sendLinkProject = () => async (dispatch, getState) =>{
 export const closeWindowUploadConsole = () => async (dispatch, getState) =>{
   dispatch({ type: WINDOWUPLOADCONSOLE_RESET });
 }
+
+//Añade una id de projecto donde se tiene que eliminar un projecto
+export const addIdProjectForDeleteFile = (projecyId) => async (dispatch, getState) =>{
+  dispatch({ type: ADD_FILE_TO_DELETE, payload: projecyId});
+}
+
+//Elimina un fichero desde un proyecto
+export const deleteFileFromproject = () => async (dispatch, getState) =>{
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+        })
+    });
+  }
+
+  try {
+
+    const token = await getToken();
+    const projectId = getState().deleteFileFromProject;
+
+    //TODO: Agregar un callback para confirmar que se elimino
+    electron.ipcRenderer.send('deleteFile', projectId);
+
+    const res = await axios.post(`${getState().apiUrl}api/deleteLinkFromProject`, {projectId}, { headers: { auth: token } });
+
+  } catch (err) {
+    console.log(err);
+  }
+};

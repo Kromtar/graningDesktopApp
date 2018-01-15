@@ -107,8 +107,8 @@ ipcMain.on('changeApiUrl', (event, url) => {
 ipcMain.on('uploadFile', (event, fileInput, proyectId) => {
 
     let path = fileInput[0].path.replace(/([^:]\/)\/+/g, "$1");
-    let name = fileInput[0].name;
-    let size = fileInput[0].size;
+    let name = fileInput[0].name.slice(0, -4);
+    let nameCut = name.substring(0, 100);
 
     mainWindow.webContents.send('openUploadFileWindow');
 
@@ -117,11 +117,10 @@ ipcMain.on('uploadFile', (event, fileInput, proyectId) => {
 
     const dropboxUpload = new DropboxUploadStream(
       null,
-      "/testApi2/" + proyectId + "/" + proyectId + ".zip",
+      "/testApi2/" + proyectId + "/" + name + "-" + proyectId + ".zip",
       dropbox,
       mainWindow,
-      proyectId,
-      name
+      proyectId
     );
 
     dropbox.filesDeleteV2({path: '/testApi2/'+proyectId }).then((res) => {
@@ -141,8 +140,17 @@ ipcMain.on('uploadFile', (event, fileInput, proyectId) => {
 
     });
 
-
 });
+
+//Elimina un fichero
+ipcMain.on('deleteFile', (event, projectId) => {
+  dropbox.filesDeleteV2({path: '/testApi2/'+ projectId }).then((res) => {
+    console.log('Fichero eliminado');
+  }).catch((err) => {
+    //console.log('Erorr eliminando fichero', err);
+  });
+});
+
 //--------------Menu--------------//
 
 //Template del menu

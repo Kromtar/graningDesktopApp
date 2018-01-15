@@ -163,7 +163,9 @@ class ProjectDetail extends Component {
                     <div className="col s12">
                     <p><b>Documentos del proyecto:</b></p>
                     <div className="divider" style={{marginBottom: '5px'}}></div>
-                      Aqui van los ficheros
+                      <div style={{marginTop: '10px', marginBottom: '10px'}}>
+                        {this.props.projectDetailStatic.filename ? 'Nombre del ultimo archivo subido: ' + this.props.projectDetailStatic.filename : 'No hay documentos en este proyeco actualmente'}
+                      </div>
                     </div>
 
                   </div>

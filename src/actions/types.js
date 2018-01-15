@@ -28,3 +28,5 @@ export const REMOVE_FILE = 'remove_file';
 export const WINDOWUPLOADCONSOLE = 'windowUploadConsole';
 export const WINDOWUPLOADCONSOLE_ADDCHUNK = 'windowUploadConsoleAddChunk';
 export const WINDOWUPLOADCONSOLE_RESET = 'windowUploadConsoleReset';
+export const ADD_FILE_TO_DELETE = 'addFileToDelete';
+export const CLEAR_FILE_TO_DELETE = 'clearFileToDelete';
