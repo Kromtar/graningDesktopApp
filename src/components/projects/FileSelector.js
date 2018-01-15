@@ -13,7 +13,7 @@ class FileSector extends Component {
     } else if (isDragReject) {
       return <h4 className="drop-message">Error en el formato del archivo!</h4>;
     } else {
-      return <h4 className="drop-message">Arrastra el projecto aqui o haz click...</h4>
+      return <h4 className="drop-message">Arrastra el projecto aquí o haz click...</h4>
     }
   };
 

@@ -65,8 +65,16 @@ class ClientDetail extends Component {
         sortable: false,
         filterable: false,
         Cell: row => (
-          <a onClick={() => console.log('ver mas del proyecto')} className="waves-effect waves-light btn" style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small'}}>
-            <i className="material-icons right">extension</i>
+          <a onClick={() => console.log('Abrir detalle del proyecto')} className="waves-effect waves-light btn"
+            style={{
+              color: '#fff',
+              height: '25px',
+              lineHeight: '26px',
+              padding: '0 0.5rem',
+              fontSize: 'small',
+              backgroundColor: '#3399ff'
+            }}>
+            <i style={{marginLeft: '8px'}} className="material-icons right">visibility</i>
             Ver mas
           </a>
         )},
@@ -80,8 +88,8 @@ class ClientDetail extends Component {
           <a onClick={() =>{
               this.setState({projectSelectedForRemove: {id: row.value, name: row.row.name, internalcode: row.row.internalcode}});
               $("#removeProjectFromUserModal").modal('open');
-            }} className="waves-effect waves-light btn" style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small'}}>
-            <i className="material-icons right">redo</i>
+            }} className="waves-effect waves-light btn" style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small', backgroundColor: '#ff6600'}}>
+            <i style={{marginLeft: '8px'}} className="material-icons right">remove_circle_outline</i>
             Remover acceso
           </a>
         )}
@@ -93,12 +101,16 @@ class ClientDetail extends Component {
 
         {/* Cuerpo con footer fijo */}
         <div style={{display: 'flex', minHeight: '91vh', flexDirection: 'column'}}>
-          <main className="container" style={{flex: '1 1 auto', marginTop: '23px'}}>
+          <main className="container" style={{flex: '1 1 auto', marginTop: '22px'}}>
 
             {/* Titulo */}
-            <div className="card blue-grey darken-1">
-              <div className="card-content white-text" style={{paddingBottom: '2px', paddingTop: '10px'}}>
+            <div className="card">
+              <div
+                className="card-content white-text"
+                style={{ paddingBottom: '2px', paddingTop: '10px' }}
+              >
                 <span className="card-title">
+                  <i className="material-icons left">person</i>
                   Detalles del Cliente: {this.props.clientDetailStatic.name} {this.props.clientDetailStatic.surname}
                 </span>
               </div>
@@ -108,31 +120,61 @@ class ClientDetail extends Component {
             <div style={{overflow: 'auto', maxHeight: '68vh'}}>
 
               {/* Informacion general de un cliente */}
-              <div className="row z-depth-1" style={{marginLeft: '10px', marginRight: '10px'}}>
+              <div
+                className="row z-depth-3"
+                style={{
+                  marginLeft: '10px',
+                  marginRight: '10px',
+                  borderColor: '#00305b',
+                  borderRadius: '12px',
+                  borderWidth: '1px',
+                  borderStyle: 'solid'
+                }}
+              >
                 <div className="col s6">
                   <p><b>Nombre:  </b>{this.props.clientDetailStatic.name}</p>
                   <p><b>Apellido:  </b>{this.props.clientDetailStatic.surname}</p>
-                  <p><b>Compañia:  </b>{this.props.clientDetailStatic.company}</p>
+                  <p><b>Compañía:  </b>{this.props.clientDetailStatic.company}</p>
                   <p><b>Departamento:  </b>{this.props.clientDetailStatic.department}</p>
                   <p><b>Puesto de trabajo:  </b>{this.props.clientDetailStatic.workstation}</p>
                 </div>
                 <div className="col s6">
                   <p><b>Email:  </b>{this.props.clientDetailStatic.email}</p>
-                  <p><b>Telefono 1:  </b>{this.props.clientDetailStatic.phone1}</p>
-                  <p><b>Telefono 2:  </b>{this.props.clientDetailStatic.phone2}</p>
-                  <p><b>Direccion:  </b>{this.props.clientDetailStatic.address}</p>
+                  <p><b>Teléfono 1:  </b>{this.props.clientDetailStatic.phone1}</p>
+                  <p><b>Teléfono 2:  </b>{this.props.clientDetailStatic.phone2}</p>
+                  <p><b>Dirección:  </b>{this.props.clientDetailStatic.address}</p>
                 </div>
               </div>
 
               {/* Projectos de un cliente */}
-              <div className="row z-depth-1" style={{marginLeft: '10px', marginRight: '10px'}}>
+              <div className="row z-depth-1"
+                style={{
+                  marginLeft: '10px',
+                  marginRight: '10px',
+                  borderColor: '#00305b',
+                  borderRadius: '12px',
+                  borderWidth: '1px',
+                  borderStyle: 'solid'
+                }}>
                 <div className="col s12">
-                  <div className="row">
+                  <div className="row" style={{marginBottom: '5px'}}>
                     <div className="col s6">
-                      <p><b>Proyectos del Cliente:</b></p>
+                      <p style={{ marginBottom: '10px', marginTop: '20px'}}>
+                        <b>Proyectos visibles para este cliente:</b>
+                      </p>
                     </div>
                     <div className="col s6 right-align">
-                      <a onClick={() => $("#ProjectClienteRelationModal").modal('open')} className="waves-effect waves-light btn" style={{marginTop: '10px'}}><i className="material-icons right">note_add</i>Añade un proyecto a este cliente</a>
+                      <a
+                        onClick={() => $("#ProjectClienteRelationModal").modal('open')}
+                        className="waves-effect waves-light btn"
+                        style={{
+                          marginTop: '10px',
+                          backgroundColor: '#2a6443'
+                        }}
+                      >
+                        <i className="material-icons right">folder_shared</i>
+                        Incribir en proyecto
+                      </a>
                     </div>
                   </div>
                   <div className="divider" style={{marginBottom: '5px'}}></div>
@@ -141,20 +183,29 @@ class ClientDetail extends Component {
                   <ReactTable
                     data = {data}
                     columns={tableProjectsUserColumns}
-                    defaultPageSize = {8}
+                    defaultPageSize = {6}
+                    pageSizeOptions = {[6, 12, 20, 30, 50, 100]}
                     filterable
                     noDataText="No hay datos :("
                     className="-striped -highlight"
+                    previousText='Anterior'
+                    nextText= 'Próximo'
+                    loadingText= 'Cargando...'
+                    pageText= 'Página'
+                    ofText= 'de'
+                    rowsText= 'filas'
                   />
-
                 </div>
               </div>
             </div>
 
             {/* Modal para asignar un nuevo proyecto a un cliente */}
             <div id="ProjectClienteRelationModal" className="modal" style={{top: '2% !important'}}>
-              <div className="modal-content" style={{paddingBottom: '3px'}}>
-                <h5 className="header">Agrega un proyecto para este Cliente</h5>
+              <div className="modal-content" style={{paddingBottom: '3px', paddingTop: '3px'}}>
+                <h5 className="header" style={{marginBottom: '15px'}}>
+                  Inscribe a {this.props.clientDetailStatic.name} {this.props.clientDetailStatic.surname} en un proyecto
+                </h5>
+                <div className="divider" style={{marginBottom: '4px'}}></div>
                 <AddProjectToClient
                   onClose={() => $("#ProjectClienteRelationModal").modal('close')}
                 />
@@ -182,9 +233,9 @@ class ClientDetail extends Component {
           {/* Barra de navegacion inferior */}
           <FooterNavigator
             leftLabel='Cerrar'
-            rightLabel='Editar informacion del Usuario'
-            rightIcon='mode_edit'
-            rightColor='orange'
+            rightLabel='Editar informacion del cliente (NO DISPONIBLE)'
+            rightIcon='edit'
+            rightColor='#3399ff'
             onLeftBtn={() => this.props.windowClientTabViewList()}
             onRightBtn={() => this.props.windowClientTabViewEdit()}
           />

@@ -5,10 +5,7 @@
 .modal{
   max-height: 95% !important;
   top: 2% !important;
-}
-
-.-previous{
-    height: 50px !important;
+  width: 80% !important;
 }
 
 .-previous{
@@ -65,5 +62,75 @@ select{
 .video-select-screen {
   height: 25vh;
   width: 60vw;
-  margin: 5vh auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 105px;
+}
+
+
+/* Modificaciones componentes materialize*/
+.container {
+  width: 85% !important;
+}
+
+.tabs {
+  background-color: #00305b !important;
+}
+
+.tabs > .tab > a.active {
+  color: #ffffff !important;
+}
+
+.tabs > .indicator{
+  background-color: #ffffff !important;
+}
+
+.tabs > .tab > a {
+  color: rgba(226, 209, 209, 0.7) !important;
+}
+
+.card {
+  background-color: #0066cc !important;
+}
+
+.rt-thead.-header {
+  background-color: #3399ff !important;
+}
+
+.ReactTable {
+  border-color: #3399ff !important;
+}
+
+.ReactTable > .rt-table {
+  background: rgba(239, 252, 251, 0.1) !important;
+}
+
+.pagination-bottom {
+  background-color: #3399ff !important;
+}
+
+.-pagination input {
+  padding: 0px !important;
+}
+
+.-btn {
+  color: rgb(0, 0, 0) !important;
+  background-color: #ffffff !important;
+}
+
+input:focus {
+  border-bottom: 1px solid #ff6600 !important;
+  box-shadow: 0 1px 0 0 #ff6600 !important;
+}
+
+input {
+  border-bottom: 1px solid #0066cc !important;
+}
+
+label {
+  color: #000 !important;
+}
+
+blockquote{
+  border-left: 5px solid #ff6600 !important;
 }

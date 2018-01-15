@@ -117,13 +117,13 @@ ipcMain.on('uploadFile', (event, fileInput, proyectId) => {
 
     const dropboxUpload = new DropboxUploadStream(
       null,
-      "/testApi2/" + proyectId + "/" + name + "-" + proyectId + ".zip",
+      "/graningportaldb/" + proyectId + "/" + name + "-" + proyectId + ".zip",
       dropbox,
       mainWindow,
       proyectId
     );
 
-    dropbox.filesDeleteV2({path: '/testApi2/'+proyectId }).then((res) => {
+    dropbox.filesDeleteV2({path: '/graningportaldb/'+proyectId }).then((res) => {
       console.log('Fichero eliminado');
     }).catch((err) => {
       //console.log('Erorr eliminando fichero', err);
@@ -144,7 +144,7 @@ ipcMain.on('uploadFile', (event, fileInput, proyectId) => {
 
 //Elimina un fichero
 ipcMain.on('deleteFile', (event, projectId) => {
-  dropbox.filesDeleteV2({path: '/testApi2/'+ projectId }).then((res) => {
+  dropbox.filesDeleteV2({path: '/graningportaldb/'+ projectId }).then((res) => {
     console.log('Fichero eliminado');
   }).catch((err) => {
     //console.log('Erorr eliminando fichero', err);

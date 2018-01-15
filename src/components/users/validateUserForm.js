@@ -3,13 +3,13 @@ export default function validate(values){
   const errors = {};
 
     if(!values.name){
-      errors.name = "Tienes que definir el nombre del cliente";
+      errors.name = "Falta el nombre del cliente";
     } else if(values.name.length > 50){
       errors.name = "Muchos caracteres";
     }
 
     if(!values.surname){
-      errors.surname = "Tienes que definir el apellido del cliente";
+      errors.surname = "Falta el apellido del cliente";
     } else if(values.surname.length > 50){
       errors.surname = "Muchos caracteres";
     }
@@ -25,7 +25,7 @@ export default function validate(values){
     }
 
     if(!values.company){
-      errors.company = "Tienes que definir en que empresa trabaja el cliente";
+      errors.company = "Falta la empresad del cliente";
     } else if(typeof(values.company) !== "undefined"){
       if(values.company.length > 40){
         errors.company = "Muchos caracteres";
@@ -33,7 +33,7 @@ export default function validate(values){
     }
 
     if(!values.workstation){
-      errors.workstation = "Tienes que definir que puesto de trabajo tiene el cleinte";
+      errors.workstation = "Falta el puesto de trabajo del cliente";
     } else if(typeof(values.workstation) !== "undefined"){
       if(values.workstation.length > 50){
         errors.workstation = "Muchos caracteres";
@@ -54,7 +54,7 @@ export default function validate(values){
 
   if(typeof(values.phone1) !== "undefined"){
     if(!Number(values.phone1)){
-      errors.phone1 = "Tienen que ser solo numeros";
+      errors.phone1 = "Solo numeros";
     } else if(values.phone1.length > 15){
       errors.phone1 = "Muchos numeros";
     }
@@ -62,7 +62,7 @@ export default function validate(values){
 
   if(typeof(values.phone2) !== "undefined"){
     if(!Number(values.phone2)){
-      errors.phone2 = "Tienen que ser solo numeros";
+      errors.phone2 = "Solo numeros";
     } else if(values.phone2.length > 15){
       errors.phone2 = "Muchos numeros";
     }

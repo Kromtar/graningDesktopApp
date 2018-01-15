@@ -43,9 +43,9 @@ class AddProjectToClient extends Component {
               this.props.onClose();
             }}
             className="waves-effect waves-light btn"
-            style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small'}}
+            style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small', backgroundColor: '#2a6443'}}
           >
-            <i className="material-icons right">add</i>
+            <i style={{marginLeft: '8px'}} className="material-icons right">create_new_folder</i>
             Agregar
           </a>
         )
@@ -60,9 +60,16 @@ class AddProjectToClient extends Component {
           data={filterProjects}
           columns={tableAddProjectsUserColumns}
           defaultPageSize = {12}
+          pageSizeOptions = {[6, 12, 20, 30, 50, 100]}
           filterable
           noDataText="No hay datos :("
           className="-striped -highlight"
+          previousText='Anterior'
+          nextText= 'Próximo'
+          loadingText= 'Cargando...'
+          pageText= 'Página'
+          ofText= 'de'
+          rowsText= 'filas'
         />
 
         <div className="modal-footer">

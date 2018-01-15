@@ -24,102 +24,94 @@ import {
 const electron = window.require("electron");
 
 //Consulta a la API por la lista de todos los proyectos
-export const fetchProjects = () => async (dispatch, getState) => {
-  //Pregunndo a electron por el token
-  new Promise(resolve => {
-      electron.ipcRenderer.send('getToken')
-      electron.ipcRenderer.on('getToken', (event, result) => {
+export const fetchProjects = () => async (dispatch, getState) =>{
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
           resolve(result);
-      })
-  }).then( async function(token){
-      try {
+        })
+    });
+  }
 
-        const res = await axios.get(`${getState().apiUrl}api/allProjects`, { headers: { auth: token } });
-
-        dispatch({ type: FETCH_PROJECTS, payload: res.data });
-
-      } catch (err) {
-        //TODO: Manejo de error con mensaje
-        console.log('Error en peticion', err);
-      }
-  }).catch(function(err){
-    //TODO:Error al consultar a electron
-    console.log('Error interactuando con electron', err);
-  });
+  try {
+    const token = await getToken();
+    const res = await axios.get(`${getState().apiUrl}api/allProjects`, { headers: { auth: token } });
+    dispatch({ type: FETCH_PROJECTS, payload: res.data });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 //Crea un nuevo proyecto
 export const createNewProject = (data) => async (dispatch, getState) =>{
-  new Promise(resolve => {
-      electron.ipcRenderer.send('getToken')
-      electron.ipcRenderer.on('getToken', (event, result) => {
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
           resolve(result);
-      })
-  }).then( async function(token){
-      try {
-        //TODO: Manejo de consultas fallidas ?
-        const res = await axios.post(`${getState().apiUrl}api/createProject`, data.values, { headers: { auth: token } });
-      } catch (err) {
-        //TODO: Manejo de error con mensaje
-        console.log('Error en peticion', err);
-      }
-  }).catch(function(err){
-    //TODO:Error al consultar a electron
-    console.log('Error interactuando con electron', err);
-  });
+        })
+    });
+  }
+
+  try {
+    const token = await getToken();
+    const res = await axios.post(`${getState().apiUrl}api/createProject`, data.values, { headers: { auth: token } });
+
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 //Busca el detalle de un projecto
 export const getProjectDetail = (data) => async (dispatch, getState) =>{
-  new Promise(resolve => {
-      electron.ipcRenderer.send('getToken')
-      electron.ipcRenderer.on('getToken', (event, result) => {
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
           resolve(result);
-      })
-  }).then( async function(token){
-      try {
-        //TODO: Manejo de consultas fallidas ?
-        const resP = await axios.get(`${getState().apiUrl}api/getProjectDetail`, { headers: { auth: token, id: data } });
+        })
+    });
+  }
 
-        dispatch({ type: FETCH_PROJECTDETAIL, payload: resP.data });
-        dispatch({ type: FETCH_PROJECTDETAIL_STATIC, payload: resP.data });
+  try {
+    const token = await getToken();
+    const resP = await axios.get(`${getState().apiUrl}api/getProjectDetail`, { headers: { auth: token, id: data } });
+    const resU = await axios.get(`${getState().apiUrl}api/getClientsFromProject`, { headers: { auth: token, id: data } });
 
-        const resU = await axios.get(`${getState().apiUrl}api/getClientsFromProject`, { headers: { auth: token, id: data } });
+    dispatch({ type: FETCH_PROJECTDETAIL, payload: resP.data });
+    dispatch({ type: FETCH_PROJECTDETAIL_STATIC, payload: resP.data });
+    dispatch({ type: FETCH_PROJECT_USERS, payload: resU.data });
+    dispatch({ type: WINDOWPROJECTTAB, payload: 'detail' });
 
-        dispatch({ type: FETCH_PROJECT_USERS, payload: resU.data });
-
-        dispatch({ type: WINDOWPROJECTTAB, payload: 'detail' });
-
-      } catch (err) {
-        //TODO: Manejo de error con mensaje
-        console.log('Error en peticion', err);
-      }
-  }).catch(function(err){
-    //TODO:Error al consultar a electron
-    console.log('Error interactuando con electron', err);
-  });
+  } catch (err) {
+    console.log(err);
+  }
 };
+
 
 //Edita el contenido principal de un proyecto
 export const editProjectGeneral = (id, data) => async (dispatch, getState) =>{
-  new Promise(resolve => {
-      electron.ipcRenderer.send('getToken')
-      electron.ipcRenderer.on('getToken', (event, result) => {
-          resolve(result);
-      })
-  }).then( async function(token){
-      try {
-        //TODO: Manejo de consultas fallidas ?
-        await axios.put(`${getState().apiUrl}api/updateProjectGeneral`, data.values, { headers: { auth: token, id: id } });
 
-      } catch (err) {
-        //TODO: Manejo de error con mensaje
-        console.log('Error en peticion', err);
-      }
-  }).catch(function(err){
-    //TODO:Error al consultar a electron
-    console.log('Error interactuando con electron', err);
-  });
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+        })
+    });
+  }
+
+  try {
+    const token = await getToken();
+    await axios.put(`${getState().apiUrl}api/updateProjectGeneral`, data.values, { headers: { auth: token, id: id } });
+
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 //Añade temporalmente una nueva estapa
@@ -135,25 +127,23 @@ export const deleteTempStage = (tempId) => (dispatch) => {
 
 //Añadir etapa al proyecto
 export const addStageToProject = (id) => async (dispatch, getState) =>{
-  new Promise(resolve => {
-      electron.ipcRenderer.send('getToken')
-      electron.ipcRenderer.on('getToken', (event, result) => {
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
           resolve(result);
-      })
-  }).then( async function(token){
-      try {
+        })
+    });
+  }
 
-        //TODO: Manejo de consultas fallidas ?
-        await axios.put(`${getState().apiUrl}api/addStageToProject`, getState().newStage, { headers: { auth: token, id: id } });
+  try {
+    const token = await getToken();
+    await axios.put(`${getState().apiUrl}api/addStageToProject`, getState().newStage, { headers: { auth: token, id: id } });
 
-      } catch (err) {
-        //TODO: Manejo de error con mensaje
-        console.log('Error en peticion', err);
-      }
-  }).catch(function(err){
-    //TODO:Error al consultar a electron
-    console.log('Error interactuando con electron', err);
-  });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 //añade id de etapas para ser eliminadas a un temporal
@@ -161,26 +151,26 @@ export const addStageidForDelete = (idStage) => (dispatch, getState) =>{
   dispatch({ type: ADD_STAEGEID_FOR_DELETE , payload: idStage });
 };
 
+
 //elimina etapas de un proyecto
 export const deleteStageFromProject = (idProject) => async (dispatch, getState) =>{
-  new Promise(resolve => {
-      electron.ipcRenderer.send('getToken')
-      electron.ipcRenderer.on('getToken', (event, result) => {
-          resolve(result);
-      })
-  }).then( async function(token){
-      try {
-        //TODO: Manejo de consultas fallidas ?
-        await axios.put(`${getState().apiUrl}api/deleteStageFromProject`, getState().deleteStageList, { headers: { auth: token, id: idProject } });
 
-      } catch (err) {
-        //TODO: Manejo de error con mensaje
-        console.log('Error en peticion', err);
-      }
-  }).catch(function(err){
-    //TODO:Error al consultar a electron
-    console.log('Error interactuando con electron', err);
-  });
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+        })
+    });
+  }
+
+  try {
+    const token = await getToken();
+    await axios.put(`${getState().apiUrl}api/deleteStageFromProject`, getState().deleteStageList, { headers: { auth: token, id: idProject } });
+
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 //añadir rev a una etapa nueva o antigua
@@ -188,29 +178,27 @@ export const tempNewRev = (data, tempId ,stageId ) => (dispatch) => {
   dispatch({ type: NEW_REV, payload: {data: data, tempId: tempId, stageId: stageId} });
 };
 
+//añade rev a un projecto
 export const addRevToProject = (id) => async (dispatch, getState) =>{
-  new Promise(resolve => {
-      electron.ipcRenderer.send('getToken')
-      electron.ipcRenderer.on('getToken', (event, result) => {
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
           resolve(result);
-      })
-  }).then( async function(token){
-      try {
-        const data = getState().newRev;
+        })
+    });
+  }
 
-        const revsWhitoutTempId =_.map(data, e => _.pick(e, ['data', 'stageId']));
+  try {
+    const token = await getToken();
+    const data = getState().newRev;
+    const revsWhitoutTempId =_.map(data, e => _.pick(e, ['data', 'stageId']));
+    await axios.put(`${getState().apiUrl}api/addRevsToProject`, revsWhitoutTempId, { headers: { auth: token, id: id } });
 
-        //TODO: Manejo de consultas fallidas ?
-        await axios.put(`${getState().apiUrl}api/addRevsToProject`, revsWhitoutTempId, { headers: { auth: token, id: id } });
-
-      } catch (err) {
-        //TODO: Manejo de error con mensaje
-        console.log('Error en peticion', err);
-      }
-  }).catch(function(err){
-    //TODO:Error al consultar a electron
-    console.log('Error interactuando con electron', err);
-  });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 //Elimina una rev temporal
@@ -223,26 +211,25 @@ export const addRevidForDelete = (idRev, IdStage) => (dispatch, getState) =>{
   dispatch({ type: ADD_REVID_FOR_DELETE , payload: {idStage: IdStage, idRev: idRev} });
 };
 
+
 //elimina rev de un proyecto
 export const deleteRevFromProject = (idProject) => async (dispatch, getState) =>{
-  new Promise(resolve => {
-      electron.ipcRenderer.send('getToken')
-      electron.ipcRenderer.on('getToken', (event, result) => {
-          resolve(result);
-      })
-  }).then( async function(token){
-      try {
-        //TODO: Manejo de consultas fallidas ?
-        await axios.put(`${getState().apiUrl}api/deleteRevFromProject`, getState().deleteRevList, { headers: { auth: token, id: idProject } });
 
-      } catch (err) {
-        //TODO: Manejo de error con mensaje
-        console.log('Error en peticion', err);
-      }
-  }).catch(function(err){
-    //TODO:Error al consultar a electron
-    console.log('Error interactuando con electron', err);
-  });
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+        })
+    });
+  }
+
+  try {
+    const token = await getToken();
+    await axios.put(`${getState().apiUrl}api/deleteRevFromProject`, getState().deleteRevList, { headers: { auth: token, id: idProject } });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 //añade id de rev para ser editada
@@ -260,24 +247,22 @@ export const addRevForEdit = (idRev, IdStage,stageIndex,revIndex, data) => (disp
 
 //editar rev de una etapa antigua
 export const editRevsFromProyect = (idProject) => async (dispatch, getState) =>{
-  new Promise(resolve => {
-      electron.ipcRenderer.send('getToken')
-      electron.ipcRenderer.on('getToken', (event, result) => {
-          resolve(result);
-      })
-  }).then( async function(token){
-      try {
-        //TODO: Manejo de consultas fallidas ?
-        await axios.put(`${getState().apiUrl}api/editRevFromProject`, getState().editRev, { headers: { auth: token, id: idProject } });
 
-      } catch (err) {
-        //TODO: Manejo de error con mensaje
-        console.log('Error en peticion', err);
-      }
-  }).catch(function(err){
-    //TODO:Error al consultar a electron
-    console.log('Error interactuando con electron', err);
-  });
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+        })
+    });
+  }
+
+  try {
+    const token = await getToken();
+    await axios.put(`${getState().apiUrl}api/editRevFromProject`, getState().editRev, { headers: { auth: token, id: idProject } });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 //camiar nombre de etapa antigua

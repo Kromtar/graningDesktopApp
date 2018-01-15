@@ -21,10 +21,10 @@ class ClientEdit extends Component {
 
         {/* Cuerpo con footer fijo */}
         <div style={{display: 'flex', minHeight: '91vh', flexDirection: 'column'}}>
-          <main className="container" style={{flex: '1 1 auto', marginTop: '23px'}}>
+          <main className="container" style={{flex: '1 1 auto', marginTop: '22px'}}>
 
             {/* Titulo */}
-            <div className="card blue-grey darken-1">
+            <div className="card">
               <div className="card-content white-text" style={{paddingBottom: '2px', paddingTop: '10px'}}>
                 <span className="card-title">
                   Editando Cliente:

@@ -17,7 +17,8 @@ const footerNavigator = (props) => {
         <div className="col s6 right-align">
           <a
             onClick={() => props.onRightBtn()}
-            className={"waves-effect waves-light btn " + props.rightColor}
+            className={"waves-effect waves-light btn"}
+            style={{backgroundColor: props.rightColor}}
           >
             {props.rightLabel}
             <i className="material-icons right">{props.rightIcon}</i>

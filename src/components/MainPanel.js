@@ -19,18 +19,24 @@ class MainPanel extends Component {
     this.props.fetchProjects();
   }
 
-  render(){
+  onClickClients(){
+    console.log('click en clientes');
+    this.props.windowClientTabViewList();
+  }
 
-      const onClick = (credentials) => {
-        this.props.testCloseOk();
-      }
+  onClickProyects(){
+    console.log('click en proyectos');
+    this.props.windowProjectTabViewList();
+  }
+
+  render(){
 
       return(
         <div className="row">
           <div className="col s12" style={{paddingLeft: '0px', paddingRight: '0px'}}>
-            <ul className="tabs z-depth-1">
-              <li className="tab col s2"><a className="active" href="#clients">Clientes</a></li>
-              <li className="tab col s2"><a href="#projects">Proyectos</a></li>
+            <ul id="tabs" className="tabs z-depth-1">
+              <li onClick={() => this.onClickClients()} className="tab col s2"><a className="active" href="#clients">Clientes</a></li>
+              <li onClick={() => this.onClickProyects()} className="tab col s2"><a href="#projects">Proyectos</a></li>
             </ul>
           </div>
           <div id="clients" className="col s12"><ClientsTab /></div>
@@ -38,13 +44,6 @@ class MainPanel extends Component {
         </div>
       );
     }
-};
-
-function mapStateToProps(state){
-  return {
-     clients: state.clients,
-     projects: state.projects
-  };
 };
 
 export default connect(null, actions)(MainPanel);

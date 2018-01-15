@@ -90,11 +90,11 @@ class ProjectEdit extends Component {
       return (
         <li key={stage.name}>
           <div className="collapsible-header" style={{display: 'block'}}>
-            <i className="material-icons">details</i>{stage.name}
+            <i className="material-icons">device_hub</i>{stage.name}
             <i onClick={() => this.props.deleteTempStage(stage.tempId)} className="material-icons right" >delete</i>
           </div>
           <div className="collapsible-body">
-              Guarda los cambios antes de poder añadir una revision a esta nueva estapa
+              Guarda los cambios antes de poder añadir una revisión a esta nueva etapa
           </div>
         </li>
       );
@@ -112,7 +112,7 @@ class ProjectEdit extends Component {
       }
     }
     if(typeof(this.props.projectDetail._stage) !== "undefined" && this.props.newStage.length === 0){ //Solo pone el mensaje si tampoco hay tepmps
-      return <blockquote><p>No se ha creado ninguna etapa de proyecto aun</p></blockquote>;
+      return <blockquote><p>No se ha creado ninguna etapa en este proyecto</p></blockquote>;
     }
   }
 
@@ -121,7 +121,7 @@ class ProjectEdit extends Component {
       return (
           <li id={stage._id} key={stage._id}>
             <div className="collapsible-header" style={{display: 'block'}}>
-              <i className="material-icons">assistant_photo</i>{stage.name}
+              <i className="material-icons">device_hub</i>{stage.name}
               <i onClick={() => {
                 this.props.addStageidForDelete(stage._id);
                 $("#"+stage._id).hide();
@@ -134,15 +134,19 @@ class ProjectEdit extends Component {
             <div className="collapsible-body">
               <div className="row z-depth-1" style={{paddingTop: '6px', marginBottom: '0px'}}>
                 <div className="row">
-                  <div className="col s12">
+                  <div className="col s6">
+                    <p><b>Revisiones de la etapa:</b></p>
+                  </div>
+                  <div className="col s6">
                     <a
                       onClick={() => {
                         this.setState({stageSelectedForNewRev: stage._id});
                         $("#newRevModal").modal('open');
                       }}
-                      style={{marginTop: '7px'}}
-                      className="teal waves-effect btn-flat right white-text">
-                      Añadir revision a la etapa {stage.name}
+                      className="waves-effect btn right" style={{marginTop: '7px', marginRight: '7px', backgroundColor: '#3399ff'}}>
+                      Añadir revisión a la etapa {stage.name}
+                      <i style={{paddingLeft: '8px'}} className="material-icons rigth">add</i>
+                      <i style={{paddingLeft: '2px'}} className="material-icons rigth">view_quilt</i>
                     </a>
                   </div>
                 </div>
@@ -167,7 +171,17 @@ class ProjectEdit extends Component {
     });
     return _.map(filterRevs, rev => {
       return (
-        <div className="row" key={rev.tempId}>
+        <div
+          className="col s12"
+          style={{
+            borderStyle: 'solid',
+            borderColor: '#00305b',
+            borderWidth: '1px',
+            borderRadius: '10px',
+            paddingBottom: '5px',
+            marginBottom: '5px'
+          }}
+          key={rev.tempId}>
           <div className="col s2">
            <p style={{marginLeft: '10px'}}><b>{rev.data.name}</b></p>
          </div>
@@ -197,7 +211,19 @@ class ProjectEdit extends Component {
       var count = 0;
       return _.map(stage._review, (review, revIndex) => {
         return (
-          <div id={review._id} className="row" key={review._id}>
+          <div
+            id={review._id}
+            className="col s12"
+            key={review._id}
+            style={{
+              borderStyle: 'solid',
+              borderColor: '#00305b',
+              borderWidth: '1px',
+              borderRadius: '10px',
+              paddingBottom: '5px',
+              marginBottom: '5px'
+            }}
+          >
             <div className="col s2">
              <p style={{marginLeft: '10px'}}><b>{review.name}</b></p>
            </div>
@@ -258,12 +284,21 @@ class ProjectEdit extends Component {
               this.props.addIdProjectForDeleteFile(this.props.projectDetail._id);
               $('#actualFileDisplay').hide();
             }}
-            style={{marginBottom: '7px'}}
-            className="waves-effect btn-flat right red white-text">
-            Eliminar el fichero actual
+            style={{marginBottom: '7px', backgroundColor: '#ff6600'}}
+            className="waves-effect btn right">
+            Eliminar ultimo archivo
+            <i style={{paddingLeft: '8px'}} className="material-icons rigth">delete</i>
           </a>
         </div>
       );
+    }
+  }
+
+  renderActualFileContetn(){
+    if(this.props.projectDetail.filename){
+      return <div>Nombre del ultimo archivo disponible: {this.props.projectDetail.filename}</div>;
+    }else{
+      return <blockquote><p>No hay documentos en este proyecto actualmente</p></blockquote>;
     }
   }
 
@@ -273,43 +308,67 @@ class ProjectEdit extends Component {
       <div>
 
         <form id="projectEditForm" onSubmit={
-          (this.props.handleSubmit(() => {
+          (this.props.handleSubmit(async () => {
 
-            //Procesa la info general
-            //TODO: Logica para no hacer peticiones innecesarias
-            this.props.editProjectGeneral(this.props.projectDetail._id, this.props.formValue).then(() => {
-              this.props.addStageToProject(this.props.projectDetail._id).then(() => {
-                this.props.deleteStageFromProject(this.props.projectDetail._id).then(() => {
-                  this.props.addRevToProject(this.props.projectDetail._id).then(() => {
+            console.log('enviando pet: editProjectGeneral');
+            await this.props.editProjectGeneral(this.props.projectDetail._id, this.props.formValue);
 
-                      if(Object.keys(this.props.fileSelected).length > 0){
-                        this.props.uploadNewFile(this.props.projectDetail._id);
-                      }
+            if(this.props.newStage.length > 0){
+              console.log('enviando pet: addStage');
+              await this.props.addStageToProject(this.props.projectDetail._id);
+            }
 
-                      if(this.props.deleteFileFromProject !== ''){
-                        this.props.deleteFileFromproject();
-                      }
+            if(this.props.deleteStageList.length > 0){
+              console.log('enviando pet: deleteStage');
+              await this.props.deleteStageFromProject(this.props.projectDetail._id);
+            }
 
-                      this.props.editRevsFromProyect(this.props.projectDetail._id);
-                      this.props.deleteRevFromProject(this.props.projectDetail._id);
-                      this.props.getProjectDetail(this.props.projectDetail._id);
-                      this.props.fetchProjects();
-                      this.forceUpdate();
-                  });
-                });
-              });
-            });
+            if(Object.keys(this.props.fileSelected).length > 0){
+              console.log('enviando pet: add file');
+              await this.props.uploadNewFile(this.props.projectDetail._id);
+            }
+
+            if(typeof(this.props.deleteFileFromProject) !== "undefined"){
+              if(this.props.deleteFileFromProject !== ""){
+                console.log('enviando Pet: deleteFile');
+                await this.props.deleteFileFromproject();
+              }
+            }
+
+            if(Object.keys(this.props.editRev).length > 0){
+              console.log('enviando Pet: editRev');
+              await this.props.editRevsFromProyect(this.props.projectDetail._id);
+            }
+
+            if(this.props.deleteRevList.length > 0){
+              console.log('enviando Pet: deleteRev');
+              await this.props.deleteRevFromProject(this.props.projectDetail._id);
+            }
+
+
+            if(this.props.newRev.length > 0){
+              console.log('enviando Pet: addRev');
+              await this.props.addRevToProject(this.props.projectDetail._id);
+            }
+
+            console.log('refresh de detalle de royecto');
+            await this.props.getProjectDetail(this.props.projectDetail._id);
+
+            console.log('refresh de lista de proyectos');
+            await this.props.fetchProjects();
+
           }))
         }>
 
         {/* Cuerpo con footer fijo */}
         <div style={{display: 'flex', minHeight: '91vh', flexDirection: 'column'}}>
-          <main className="container" style={{flex: '1 1 auto', marginTop: '23px'}}>
+          <main className="container" style={{flex: '1 1 auto', marginTop: '22px'}}>
 
             {/* Titulo */}
-            <div className="card blue-grey darken-1">
+            <div className="card">
               <div className="card-content white-text" style={{paddingBottom: '2px', paddingTop: '10px'}}>
                 <span className="card-title">
+                  <i className="material-icons left">insert_drive_file</i>
                   Editando Proyecto   Nº {this.props.projectDetail.internalcode}
                   <span style={{marginTop: '5px'}} className="new badge orange" data-badge-caption="Modo editor" />
                   {this.badgeRender()}
@@ -322,7 +381,17 @@ class ProjectEdit extends Component {
             <div style={{overflow: 'auto', maxHeight: '68vh'}}>
 
               {/* General */}
-              <div className="row z-depth-1" style={{marginLeft: '10px', marginRight: '10px'}}>
+              <div
+                className="row z-depth-3"
+                style={{
+                  marginLeft: '10px',
+                  marginRight: '10px',
+                  borderColor: '#00305b',
+                  borderRadius: '12px',
+                  borderWidth: '1px',
+                  borderStyle: 'solid'
+                }}
+              >
 
                 <div className="col s6">
                   <Field type="text" name="name" placeholder="Nombre Proyecto" label="Nombre:" component={InputField} />
@@ -334,13 +403,24 @@ class ProjectEdit extends Component {
                 <div className="col s6">
                   <Field name="openprojectdate" component={datePicker} label="Fecha inicio de proyecto"/>
                   <Field name="closeprojectdate" component={datePicker} label="Fecha cierre proyecto"/>
-                  <Field type="number" name="term" placeholder="120" label="Plazo (en dias):" component={InputField} />
+                  <Field type="number" name="term" placeholder="120" label="Plazo (en días):" component={InputField} />
                 </div>
 
               </div>
 
               {/* Etapas */}
-              <div className="row z-depth-1" style={{marginLeft: '10px', marginRight: '10px', paddingTop: '6px'}}>
+              <div
+                className="row z-depth-3"
+                style={{
+                  marginLeft: '10px',
+                  marginRight: '10px',
+                  paddingTop: '6px',
+                  borderColor: '#00305b',
+                  borderRadius: '12px',
+                  borderWidth: '1px',
+                  borderStyle: 'solid'
+                }}
+              >
 
                 <div className="col s12">
                 <div className="row">
@@ -350,9 +430,14 @@ class ProjectEdit extends Component {
                   <div className="col s6">
                     <a
                       onClick={() => $("#newStageModal").modal('open')}
-                      style={{marginTop: '7px'}}
-                      className="teal waves-effect btn-flat right white-text">
+                      style={{
+                        marginTop: '7px',
+                        backgroundColor: '#3399ff'
+                      }}
+                      className="waves-effect btn right">
                       Añadir etapa al proyecto
+                      <i style={{paddingLeft: '8px'}} className="material-icons rigth">add</i>
+                      <i style={{paddingLeft: '2px'}} className="material-icons rigth">device_hub</i>
                     </a>
                   </div>
                 </div>
@@ -364,7 +449,18 @@ class ProjectEdit extends Component {
               </div>
 
               {/* Ficheros */}
-              <div className="row z-depth-1" style={{marginLeft: '10px', marginRight: '10px', paddingTop: '6px'}}>
+              <div
+                className="row z-depth-3"
+                style={{
+                  marginLeft: '10px',
+                  marginRight: '10px',
+                  paddingTop: '6px',
+                  borderColor: '#00305b',
+                  borderRadius: '12px',
+                  borderWidth: '1px',
+                  borderStyle: 'solid'
+                }}
+              >
 
                 <div className="col s12">
                 <p><b>Documentos del proyecto:</b></p>
@@ -372,7 +468,7 @@ class ProjectEdit extends Component {
                   <div id="actualFileDisplay" className="col s12 z-depth-1" style={{marginBottom: '25px'}}>
                     <div style={{marginTop: '10px', marginBottom: '10px'}}>
                       <div className="col s6">
-                        {this.props.projectDetail.filename ? 'Nombre del ultimo archivo subido: ' + this.props.projectDetail.filename : 'No hay documentos en este proyeco actualmente'}
+                        {this.renderActualFileContetn()}
                       </div>
                       {this.renderDeleteFileButton()}
                     </div>
@@ -440,7 +536,7 @@ class ProjectEdit extends Component {
                 </a>
               </div>
               <div className="col s6 right-align">
-                <button className="teal btn-flat right white-text" type="submit">
+                <button className="btn right" type="submit" style={{backgroundColor: '#2a6443'}}>
                   Guardar
                   <i className="material-icons right">cloud_upload</i>
                 </button>
@@ -464,13 +560,18 @@ let InitializeFromStateForm = reduxForm({
 })(ProjectEdit);
 
 function mapStateToProps(state){
+  console.log(state);
   return {
     formValue: state.form.editProjectForm,
     projectDetail: state.projectDetail,
     newStage: state.newStage,
     fileSelected: state.fileSelected,
     newRev: state.newRev,
+    editRev: state.editRev,
+    deleteFileFromProject: state.deleteFileFromProject,
+    deleteStageList: state.deleteStageList,
     editRevModal: state.editRevModal,
+    deleteRevList: state.deleteRevList,
     projectUsers: state.projectUsers,
     initialValues: {
       name: state.projectDetail.name,

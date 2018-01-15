@@ -28,7 +28,7 @@ const columns = [{
     />
   )
 }, {
-  Header: 'Mail', // Required because our accessor is not a string
+  Header: 'Email', // Required because our accessor is not a string
   accessor: 'email',
   Filter: ({filter, onChange}) => (
     <input

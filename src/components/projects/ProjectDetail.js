@@ -31,22 +31,32 @@ class ProjectDetail extends Component {
     if(typeof(this.props.projectDetailStatic._stage) !== "undefined"){
       if(this.props.projectDetailStatic._stage.length > 0){
         return (
-          <ul id="collapsible" className="collapsible popout" data-collapsible="accordion">
+          <ul id="collapsible" className="collapsible popout" data-collapsible="accordion" >
             {this.renderProjectStage()}
           </ul>
         );
       }
     }
-    return <blockquote><p>No se ha creado ninguna etapa de proyecto aun</p></blockquote>;
+    return <blockquote><p>No se ha creado ninguna etapa en este proyecto</p></blockquote>;
   }
 
   renderProjectStage(){
     return _.map(this.props.projectDetailStatic._stage, stage => {
       return (
           <li key={stage._id}>
-            <div className="collapsible-header"><i className="material-icons">assistant_photo</i>{stage.name}</div>
+            <div className="collapsible-header"><i className="material-icons">device_hub</i>{stage.name}</div>
             <div className="collapsible-body">
-              <div className="row z-depth-1" style={{paddingTop: '6px', marginBottom: '0px'}}>
+              <div
+                className="row z-depth-1"
+                style={{
+                  paddingTop: '6px',
+                  marginBottom: '0px',
+                  borderStyle: 'solid',
+                  borderColor: '#00305b',
+                  borderWidth: '1px',
+                  borderRadius: '10px'
+                }}
+              >
                 {this.renderProjectRev(stage)}
               </div>
             </div>
@@ -61,7 +71,10 @@ class ProjectDetail extends Component {
         return (
           <div key={review._id}>
             <div className="col s2">
-             <p><b>{review.name}</b></p>
+             <p>
+               <i className="material-icons left" style={{marginRight: '8px'}}>view_quilt</i>
+               <b>{review.name}</b>
+             </p>
            </div>
            <div className="col s5">
              <p>Fecha entrega: {review.companytoclientdate ? this.dateFormat(review.companytoclientdate) : 'Fecha pendiente'}</p>
@@ -73,7 +86,7 @@ class ProjectDetail extends Component {
         );
       });
     } else {
-      return <blockquote><p>No se ha creado ninguna Rev. en esta etapa aun</p></blockquote>;
+      return <blockquote><p>No se ha creado ninguna revisión en esta etapa</p></blockquote>;
     }
   }
 
@@ -91,9 +104,9 @@ class ProjectDetail extends Component {
               </div>
               <div className="col s6">
                 <p>Compañia: {field.company}</p>
-                <a onClick={() => console.log('Cargar info de usuario')} className="waves-effect waves-light btn" style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small'}}>
-                  <i className="material-icons right">account_circle</i>
-                  Ver mas del Cliente
+                <a onClick={() => console.log('Cargar info de usuario')} className="waves-effect waves-light btn" style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small', backgroundColor: '#3399ff'}}>
+                  <i style={{marginLeft: '8px'}} className="material-icons right">visibility</i>
+                  Ver más del Cliente
                 </a>
               </div>
             </div>
@@ -102,9 +115,17 @@ class ProjectDetail extends Component {
         );
       });
     }else{
-      return <blockquote><p>No hay Clientes asignados a este proyecto</p></blockquote>;
+      return <blockquote><p>No hay clientes inscritos en este proyecto</p></blockquote>;
     }
 
+  }
+
+  renderDocumentSection(){
+    if(this.props.projectDetailStatic.filename){
+      return <div>Nombre del último archivo disponible: {this.props.projectDetailStatic.filename}</div>;
+    }else{
+      return <blockquote><p>No hay documentos en este proyecto actualmente</p></blockquote>;
+    }
   }
 
   render(){
@@ -114,12 +135,13 @@ class ProjectDetail extends Component {
 
           {/* Cuerpo con footer fijo */}
           <div style={{display: 'flex', minHeight: '91vh', flexDirection: 'column'}}>
-            <main className="container" style={{flex: '1 1 auto', marginTop: '23px'}}>
+            <main className="container" style={{flex: '1 1 auto', marginTop: '22px'}}>
 
               {/* Titulo */}
-              <div className="card blue-grey darken-1">
+              <div className="card">
                 <div className="card-content white-text" style={{paddingBottom: '2px', paddingTop: '10px'}}>
                   <span className="card-title">
+                    <i className="material-icons left">insert_drive_file</i>
                     Detalles del Proyecto   Nº {this.props.projectDetailStatic.internalcode}
                     {this.badgeRender()}
                   </span>
@@ -130,7 +152,17 @@ class ProjectDetail extends Component {
               <div style={{overflow: 'auto', maxHeight: '68vh'}}>
 
                   {/* General */}
-                  <div className="row z-depth-1" style={{marginLeft: '10px', marginRight: '10px'}}>
+                  <div
+                    className="row z-depth-3"
+                    style={{
+                      marginLeft: '10px',
+                      marginRight: '10px',
+                      borderColor: '#00305b',
+                      borderRadius: '12px',
+                      borderWidth: '1px',
+                      borderStyle: 'solid'
+                    }}
+                  >
 
                     <div className="col s6">
                       <p><b>Nombre:  </b>{this.props.projectDetailStatic.name}</p>
@@ -141,13 +173,24 @@ class ProjectDetail extends Component {
                     <div className="col s6">
                       <p><b>Fecha inicio proyecto:  </b>{this.props.projectDetailStatic.openprojectdate ? this.dateFormat(this.props.projectDetailStatic.openprojectdate) : 'Pendiente'}</p>
                       <p><b>Fecha cierre proyecto:  </b>{this.props.projectDetailStatic.closeprojectdate ? this.dateFormat(this.props.projectDetailStatic.closeprojectdate) : 'Pendiente'}</p>
-                      <p><b>Plazo (en dias):  </b>{this.props.projectDetailStatic.term}</p>
+                      <p><b>Plazo (en días):  </b>{this.props.projectDetailStatic.term}</p>
                     </div>
 
                   </div>
 
                   {/* Etapas */}
-                  <div className="row z-depth-1" style={{marginLeft: '10px', marginRight: '10px', paddingTop: '6px'}}>
+                  <div
+                    className="row z-depth-3"
+                    style={{
+                      marginLeft: '10px',
+                      marginRight: '10px',
+                      paddingTop: '6px',
+                      borderColor: '#00305b',
+                      borderRadius: '12px',
+                      borderWidth: '1px',
+                      borderStyle: 'solid'
+                    }}
+                  >
 
                     <div className="col s12">
                     <p><b>Avance del proyecto:</b></p>
@@ -158,22 +201,44 @@ class ProjectDetail extends Component {
                   </div>
 
                   {/* Ficheros */}
-                  <div className="row z-depth-1" style={{marginLeft: '10px', marginRight: '10px', paddingTop: '6px'}}>
+                  <div
+                    className="row z-depth-3"
+                    style={{
+                      marginLeft: '10px',
+                      marginRight: '10px',
+                      paddingTop: '6px',
+                      borderColor: '#00305b',
+                      borderRadius: '12px',
+                      borderWidth: '1px',
+                      borderStyle: 'solid'
+                    }}
+                  >
 
                     <div className="col s12">
                     <p><b>Documentos del proyecto:</b></p>
                     <div className="divider" style={{marginBottom: '5px'}}></div>
                       <div style={{marginTop: '10px', marginBottom: '10px'}}>
-                        {this.props.projectDetailStatic.filename ? 'Nombre del ultimo archivo subido: ' + this.props.projectDetailStatic.filename : 'No hay documentos en este proyeco actualmente'}
+                        {this.renderDocumentSection()}
                       </div>
                     </div>
 
                   </div>
 
                   {/* Clientes */}
-                  <div className="row z-depth-1" style={{marginLeft: '10px', marginRight: '10px'}}>
+                  <div
+                    className="row z-depth-3"
+                    style={{
+                      marginLeft: '10px',
+                      marginRight: '10px',
+                      borderColor: '#00305b',
+                      borderRadius: '12px',
+                      borderWidth: '1px',
+                      borderStyle: 'solid'
+
+                    }}
+                  >
                     <div className="col s12">
-                      <p><b>Clientes que ven este proyecto:</b></p>
+                      <p><b>Clientes inscritos en este proyecto:</b></p>
                       <div className="divider" style={{marginBottom: '5px'}}></div>
                       {this.renderUserFromProject()}
                     </div>
@@ -198,8 +263,8 @@ class ProjectDetail extends Component {
                   </a>
                 </div>
                 <div className="col s6 right-align">
-                  <a onClick={() => this.props.windowProjectTabViewEdit()} className="waves-effect orange waves-light btn">
-                    Editar informacion del proyecto
+                  <a onClick={() => this.props.windowProjectTabViewEdit()} className="waves-effect waves-light btn" style={{backgroundColor: '#3399ff'}}>
+                    Editar proyecto
                     <i className="material-icons right">mode_edit</i>
                   </a>
                 </div>

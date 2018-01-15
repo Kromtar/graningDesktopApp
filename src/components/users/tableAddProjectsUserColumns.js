@@ -8,7 +8,7 @@ const filterStyle = {
 };
 
 const columns = [{
-  Header: 'Cod Graning',
+  Header: 'Cod. Graning',
   maxWidth: 150,
   accessor: 'internalcode', // String-based value accessors!
   Filter: ({filter, onChange}) => (

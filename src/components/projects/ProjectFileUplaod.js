@@ -40,7 +40,7 @@ class ProjectFileUplaod extends Component {
         <div className="container" style={{ marginTop:  '30px'}}>
 
           {/* Titulo */}
-          <div className="card blue-grey darken-1">
+          <div className="card">
             <div className="card-content white-text" style={{paddingBottom: '2px', paddingTop: '10px'}}>
               <span className="card-title">Subiendo Fichero</span>
             </div>

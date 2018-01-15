@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
+import * as actions from '../../actions';
 
 import InputField from '../aux/inputField';
 import datePicker from '../aux/datePicker';
@@ -96,7 +97,10 @@ class NewProject extends Component {
               </a>
               <button
                 className="teal btn-flat right white-text"
-                onClick={() => { this.props.onProjectSubmit(this.props.form); }}
+                onClick={async () => {
+                  await this.props.onProjectSubmit(this.props.form);
+                  await this.props.fetchProjects();
+                }}
               >
                 Añadir Proyecto
                 <i className="material-icons right">extension</i>
@@ -115,7 +119,7 @@ function mapStateToProps(state){
   };
 };
 
-NewProject = connect(mapStateToProps)(NewProject);
+NewProject = connect(mapStateToProps, actions)(NewProject);
 
 export default reduxForm({
   validate: validateProjectForm,
