@@ -121,7 +121,8 @@ class ProjectEdit extends Component {
       return (
           <li id={stage._id} key={stage._id}>
             <div className="collapsible-header" style={{display: 'block'}}>
-              <i className="material-icons">device_hub</i>{stage.name}
+              <i className="material-icons">device_hub</i>
+                {stage.name}
               <i onClick={() => {
                 this.props.addStageidForDelete(stage._id);
                 $("#"+stage._id).hide();
@@ -191,12 +192,18 @@ class ProjectEdit extends Component {
          <div className="col s4">
            <p>Fecha correccion: {rev.data.clienttocompany ? rev.data.clienttocompany: 'Fecha pendiente'}</p>
          </div>
-         <div className="col s2">
+         <div className="col s2" style={{height: '39px'}}>
+           <i
+             className="material-icons left"
+             style={{marginTop: '15px', color: 'white'}}
+           >
+             border_color
+           </i>
            <i onClick={() => {
              this.props.deleteTempRev(rev.tempId);
            }}
-           className="material-icons center-align"
-           style={{marginTop: '15px'}}
+           className="material-icons right"
+           style={{marginTop: '15px', marginRight: '15px'}}
            >
              delete
            </i>
@@ -483,7 +490,10 @@ class ProjectEdit extends Component {
             {/* Modal nueva stage */}
             <div id="newStageModal" className="modal" style={{top: '2% !important'}}>
               <div className="modal-content" style={{paddingBottom: '3px'}}>
-                <h5 className="header">Añade una nueva etapa al proyecto</h5>
+                <h5 className="header">
+                  <i className="material-icons left">device_hub </i>
+                  Añade una nueva etapa al proyecto
+                </h5>
                 <AddStage />
               </div>
             </div>
@@ -491,7 +501,10 @@ class ProjectEdit extends Component {
             {/* Modal nueva revision */}
             <div id="newRevModal" className="modal" style={{top: '2% !important'}}>
               <div className="modal-content" style={{paddingBottom: '3px'}}>
-                <h5 className="header">Añade una nueva revision a la etapa</h5>
+                <h5 className="header">
+                  <i className="material-icons left">view_quilt </i>
+                  Añade una nueva revisión a la etapa
+                </h5>
                   <AddRev onSaveTmpRev={(data) => {
                     this.props.tempNewRev(data, this.props.newRev.length, this.state.stageSelectedForNewRev);
                   }}/>
@@ -515,9 +528,10 @@ class ProjectEdit extends Component {
                           //enviar todo otra vez
                           $('#editRevModal').modal('close');
                         }}
-                        className="waves-effect right waves-green green btn"
+                        className="waves-effect right waves-light btn"
+                        style={{backgroundColor: '#2a6443'}}
                       >
-                        Aceptar
+                        Editar
                       </a>
                     </div>
                   </div>

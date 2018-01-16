@@ -13,7 +13,7 @@ class FileSector extends Component {
     } else if (isDragReject) {
       return <h4 className="drop-message">Error en el formato del archivo!</h4>;
     } else {
-      return <h4 className="drop-message">Arrastra el projecto aquí o haz click...</h4>
+      return <h4 className="drop-message">Arrastra el projecto aquí o haz click (ZIP)...</h4>
     }
   };
 
@@ -58,7 +58,7 @@ class FileSector extends Component {
             <p><b>Fichero para subir:</b> {this.props.fileSelected[0].name}</p>
           </div>
           <div className="col s3 center-align">
-            <a onClick={() => this.props.removeFile()} className="red btn right white-text" style={{marginTop: '10px'}}>
+            <a onClick={() => this.props.removeFile()} className="btn right" style={{marginTop: '10px', backgroundColor: '#ff6600'}}>
               Borrar
               <i className="material-icons right">attachment</i>
             </a>

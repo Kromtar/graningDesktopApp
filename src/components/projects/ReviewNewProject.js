@@ -18,7 +18,9 @@ class ReviewNewProject extends Component {
     if(typeof(this.props.form.newProjectForm.values) !== "undefined"){
       return (
         <div>
-          <p className="caption">Revisa que la informacion del proyecto sea correcta :)</p>
+          <p className="caption">
+            Revisa que la información del proyecto sea correcta
+          </p>
           <div className="row z-depth-1" style={{marginBottom: '15px'}}>
             <div className="col s6">
               <p><b>Nombre:</b> {this.props.form.newProjectForm.values.name}</p>

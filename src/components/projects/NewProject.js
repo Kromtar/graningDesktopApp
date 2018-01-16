@@ -59,7 +59,7 @@ class NewProject extends Component {
 
             <div style={{height: '200px'}}>
               <p>
-                Luego de crear un nuevo proyecto podras asignar clientes, modificar las etapas/revisiones y cargar los documentos.
+                Luego de crear un nuevo proyecto podrás asignar clientes, modificar las etapas como revisiones y cargar los documentos.
               </p>
             </div>
 
@@ -68,10 +68,10 @@ class NewProject extends Component {
             <div className="modal-footer" style={{marginTop: '25px'}} >
               <a
                 onClick={() => this.props.onClose()}
-                className="modal-action modal-close waves-effect waves-green btn-flat">
+                className="modal-action modal-close btn-flat">
                 Cerrar
               </a>
-              <button className="teal btn-flat right white-text" type="submit">
+              <button className="btn waves-effect waves-light right" type="submit" style={{backgroundColor: '#2a6443'}}>
                 Continuar
                 <i className="material-icons right">done</i>
               </button>
@@ -93,17 +93,18 @@ class NewProject extends Component {
                   $("#projectForm").show();
                 }}
                 className="waves-effect waves-green btn-flat">
-                Atras
+                Atrás
               </a>
               <button
-                className="teal btn-flat right white-text"
+                className="btn right aves-effect waves-teal"
+                style={{backgroundColor: '#2a6443'}}
                 onClick={async () => {
                   await this.props.onProjectSubmit(this.props.form);
                   await this.props.fetchProjects();
                 }}
               >
                 Añadir Proyecto
-                <i className="material-icons right">extension</i>
+                <i className="material-icons right">note_add</i>
               </button>
             </div>
           </div>

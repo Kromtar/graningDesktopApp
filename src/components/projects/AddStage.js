@@ -7,17 +7,17 @@ class AddStage extends Component {
   render(){
     return(
       <div>
-        <label>Nombre de la etapa</label>
-        <input placeholder="Ing. Basica" id="stage" type="text" className="validate" />
+        <label><b>Nombre de la etapa</b></label>
+        <input placeholder="Ing. Básica" id="stage" type="text" className="validate" />
         <div className="modal-footer">
           <div className="divider"></div>
           <div className="col s6">
-            <a href="#!" className="modal-action modal-close waves-effect waves-green btn-flat">Cerrar</a>
+            <a href="#!" className="modal-action modal-close waves-effect waves-light btn-flat">Cerrar</a>
           </div>
           <div className="col s6">
             <a
             onClick={() => {
-              if($('#stage').val().length <= 3){
+              if($('#stage').val().length <= 2){
                 //TODO:Crear alerta
                 console.log('Pocos caracteres');
               }else{
@@ -26,9 +26,10 @@ class AddStage extends Component {
                 $('#newStageModal').modal('close');
               }
             }}
-            className="waves-effect right waves-green green btn"
+            className="waves-effect waves-light right btn"
+            style={{backgroundColor: '#2a6443'}}
             >
-              Guardar
+              Añadir
             </a>
           </div>
         </div>

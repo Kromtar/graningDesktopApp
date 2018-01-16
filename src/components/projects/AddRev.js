@@ -16,12 +16,12 @@ class AddRev extends Component {
     return(
       <div>
         <div className="row">
-          <label>Nombre de la revision</label>
+          <label><b>Nombre de la revision</b></label>
           <input placeholder="Rev. B" id="rev" type="text" className="validate" />
         </div>
         <div className="row">
           <div className="col s6">
-            <label>Fecha de entrega</label>
+            <label><b>Fecha de entrega</b></label>
             <DatePicker
               dateFormat="DD-MM-YYYY"
               onChange={(date) => this.setState({ companytoclientdate: date })}
@@ -34,7 +34,7 @@ class AddRev extends Component {
             />
           </div>
           <div className="col s6">
-            <label>Fecha de revision</label>
+            <label><b>Fecha de revision</b></label>
             <DatePicker
               dateFormat="DD-MM-YYYY"
               onChange={(date) => this.setState({ clienttocompany: date })}
@@ -71,9 +71,10 @@ class AddRev extends Component {
                   $('#newRevModal').modal('close');
                 }
               }}
-              className="waves-effect right waves-green green btn"
+              className="waves-effect right waves-light btn"
+              style={{backgroundColor: '#2a6443'}}
             >
-              Guardar
+              Añadir
             </a>
           </div>
         </div>

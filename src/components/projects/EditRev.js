@@ -42,7 +42,7 @@ class EditRev extends Component {
     return(
       <div>
         <div className="row">
-          <label>Nombre de la revision</label>
+          <label><b>Nombre de la revision</b></label>
           <input
             value={this.conditionForRenderName()}
             onChange={(e) => {
@@ -59,7 +59,7 @@ class EditRev extends Component {
         </div>
         <div className="row">
           <div className="col s6">
-            <label>Fecha de entrega</label>
+            <label><b>Fecha de entrega</b></label>
             <DatePicker
               dateFormat="DD-MM-YYYY"
               onChange={(date) => this.props.addRevForEdit(
@@ -80,7 +80,7 @@ class EditRev extends Component {
             />
           </div>
           <div className="col s6">
-            <label>Fecha de revision</label>
+            <label><b>Fecha de revision</b></label>
             <DatePicker
               dateFormat="DD-MM-YYYY"
               onChange={(date) => this.props.addRevForEdit(

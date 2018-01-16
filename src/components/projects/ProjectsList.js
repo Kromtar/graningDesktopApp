@@ -132,7 +132,7 @@ class ProjectsList extends Component {
           {/* Modal */}
           <div id="newProjectModal" className="modal" style={{top: '2% !important'}}>
             <div className="modal-content" style={{paddingBottom: '3px'}}>
-              <h4 className="header">Añade un nuevo Proyecto</h4>
+              <h5 className="header" style={{marginBottom: '15px'}}>Añade un nuevo Proyecto</h5>
               {this.renderModalContent()}
             </div>
           </div>
