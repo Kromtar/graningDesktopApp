@@ -26,7 +26,8 @@ app.on('ready', createWindow);
 function createWindow(){
   mainWindow = new BrowserWindow({
     width: 1100,
-    height: 850
+    height: 850,
+    icon: __dirname + '/img/favicon.ico'
   });
   mainWindow.maximize();
   const startUrl = process.env.DEV_URL ||
