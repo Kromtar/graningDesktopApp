@@ -28,6 +28,9 @@ class AddProjectToClient extends Component {
       filterProjects = this.props.projects;
     }
 
+    if(tableAddProjectsUserColumns.length === 5){
+      tableAddProjectsUserColumns.pop();
+    }
     if(tableAddProjectsUserColumns.length <= 5){
       tableAddProjectsUserColumns.push({
         Heder: 'Button',

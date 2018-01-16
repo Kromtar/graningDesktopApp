@@ -110,7 +110,6 @@ export const getClientDetail = (data) => async (dispatch, getState) =>{
   try {
     const token = await getToken();
     const resU = await axios.get(`${getState().apiUrl}api/getClientDetail`, { headers: { auth: token, id: data } });
-
     dispatch({ type: FETCH_CLIENTDETAIL, payload: resU.data });
     dispatch({ type: FETCH_CLIENTDETAIL_STATIC, payload: resU.data });
     dispatch({ type: WINDOWCLIENTTAB, payload: 'detail' });
