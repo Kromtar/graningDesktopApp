@@ -355,3 +355,25 @@ export const deleteFileFromproject = () => async (dispatch, getState) =>{
     console.log(err);
   }
 };
+
+//Eliminar un proyecto
+export const deleteProject = (idProject) => async (dispatch, getState) =>{
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+        })
+    });
+  }
+
+  try {
+    const token = await getToken();
+    //TODO: Agregar un callback para confirmar que se elimino
+    electron.ipcRenderer.send('deleteFile', idProject);
+    await axios.post(`${getState().apiUrl}api/deleteProject`, {idProject}, { headers: { auth: token } });
+  } catch (err) {
+    console.log(err);
+  }
+};

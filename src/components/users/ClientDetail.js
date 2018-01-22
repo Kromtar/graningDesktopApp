@@ -233,7 +233,7 @@ class ClientDetail extends Component {
           {/* Barra de navegacion inferior */}
           <FooterNavigator
             leftLabel='Cerrar'
-            rightLabel='Editar informacion del cliente (NO DISPONIBLE)'
+            rightLabel='Editar informacion del cliente'
             rightIcon='edit'
             rightColor='#3399ff'
             onLeftBtn={() => this.props.windowClientTabViewList()}

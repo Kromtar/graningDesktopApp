@@ -164,3 +164,65 @@ export const removeProjectToClient = (clientId, projectId) => async (dispatch, g
     console.log(err);
   }
 };
+
+//Edita los datos de un cliente
+export const editClientGeneral = (id, data) => async (dispatch, getState) =>{
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+        })
+    });
+  }
+
+  try {
+    const token = await getToken();
+    const res = await axios.put(`${getState().apiUrl}api/updateClientGeneral`, data, { headers: { auth: token, id: id } });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+//Edita los datos de un cliente
+export const newPasswordForUser = (id, pass) => async (dispatch, getState) =>{
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+        })
+    });
+  }
+
+  try {
+    const token = await getToken();
+    const res = await axios.put(`${getState().apiUrl}api/changePassword`, {pass}, { headers: { auth: token, id: id } });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+//Elimina un cliente
+export const deleteClient = (id) => async (dispatch, getState) =>{
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+        })
+    });
+  }
+
+  try {
+    const token = await getToken();
+    console.log(id);
+    const res = await axios.put(`${getState().apiUrl}api/deleteUser`, null ,{ headers: { auth: token, id: id } });
+  } catch (err) {
+    console.log(err);
+  }
+};

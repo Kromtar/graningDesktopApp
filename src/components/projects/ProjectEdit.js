@@ -13,6 +13,7 @@ import AddStage from './AddStage';
 import AddRev from './AddRev';
 import EditRev from './EditRev';
 import FileSelector from './FileSelector';
+import DeleteProjectConfirmModal from './subComponents/deleteProjectConfirmModal';
 
 
 class ProjectEdit extends Component {
@@ -57,6 +58,15 @@ class ProjectEdit extends Component {
        ready: function(modal, trigger) {},
        complete: function() {}
      });
+
+     $('#deleteProjectConfirm').modal({
+        dismissible: false,
+        opacity: .5,
+        inDuration: 300,
+        outDuration: 200,
+        ready: function(modal, trigger) {},
+        complete: function() {}
+      });
 
   }
 
@@ -144,10 +154,9 @@ class ProjectEdit extends Component {
                         this.setState({stageSelectedForNewRev: stage._id});
                         $("#newRevModal").modal('open');
                       }}
-                      className="waves-effect btn right" style={{marginTop: '7px', marginRight: '7px', backgroundColor: '#3399ff'}}>
+                      className="waves-effect btn right" style={{backgroundColor: '#3399ff'}}>
+                      <i className="material-icons right">add view_quilt</i>
                       Añadir revisión a la etapa {stage.name}
-                      <i style={{paddingLeft: '8px'}} className="material-icons rigth">add</i>
-                      <i style={{paddingLeft: '2px'}} className="material-icons rigth">view_quilt</i>
                     </a>
                   </div>
                 </div>
@@ -291,10 +300,9 @@ class ProjectEdit extends Component {
               this.props.addIdProjectForDeleteFile(this.props.projectDetail._id);
               $('#actualFileDisplay').hide();
             }}
-            style={{marginBottom: '7px', backgroundColor: '#ff6600'}}
-            className="waves-effect btn right">
+            className="waves-effect btn right" style={{backgroundColor: '#ff6600', marginBottom: '10px'}}>
+            <i className="material-icons right">delete</i>
             Eliminar ultimo archivo
-            <i style={{paddingLeft: '8px'}} className="material-icons rigth">delete</i>
           </a>
         </div>
       );
@@ -437,14 +445,9 @@ class ProjectEdit extends Component {
                   <div className="col s6">
                     <a
                       onClick={() => $("#newStageModal").modal('open')}
-                      style={{
-                        marginTop: '7px',
-                        backgroundColor: '#3399ff'
-                      }}
-                      className="waves-effect btn right">
+                      className="waves-effect btn right" style={{backgroundColor: '#3399ff'}}>
+                      <i className="material-icons right">add device_hub</i>
                       Añadir etapa al proyecto
-                      <i style={{paddingLeft: '8px'}} className="material-icons rigth">add</i>
-                      <i style={{paddingLeft: '2px'}} className="material-icons rigth">device_hub</i>
                     </a>
                   </div>
                 </div>
@@ -481,6 +484,33 @@ class ProjectEdit extends Component {
                     </div>
                   </div>
                   <FileSelector />
+                </div>
+
+              </div>
+
+
+              {/* Panel borrar proyecto */}
+              <div
+                className="row z-depth-3"
+                style={{
+                  marginLeft: '10px',
+                  marginRight: '10px',
+                  borderColor: '#00305b',
+                  borderRadius: '12px',
+                  borderWidth: '1px',
+                  borderStyle: 'solid'
+                }}
+              >
+
+                <div className="col s12" style={{marginTop: '10px', marginBottom: '10px'}}>
+                  <p><b>Opciones especiales:</b></p>
+                  <div className="divider" style={{marginBottom: '5px'}}></div>
+                  <a
+                    onClick={() => $("#deleteProjectConfirm").modal('open')}
+                    className="waves-effect btn right" style={{backgroundColor: '#ff6600'}}>
+                    <i className="material-icons right">delete</i>
+                    Borrar Proyecto
+                  </a>
                 </div>
 
               </div>
@@ -538,6 +568,21 @@ class ProjectEdit extends Component {
               </div>
             </div>
 
+            {/* Modal eliminar un cliente*/}
+            <div id="deleteProjectConfirm" className="modal" style={{top: '2% !important'}}>
+              <DeleteProjectConfirmModal
+                code={this.props.projectDetail.internalcode}
+                onClose={() => $("#deleteProjectConfirm").modal('close')}
+                onConfirm={async () => {
+                  await this.props.deleteProject(this.props.projectDetail._id);
+                  //eliminar fichero
+                  await this.props.fetchProjects();
+                  $("#deleteProjectConfirm").modal('close');
+                  this.props.windowProjectTabViewList();
+                }}
+              />
+            </div>
+
           </main>
 
           {/* Barra de nav */}
@@ -574,7 +619,6 @@ let InitializeFromStateForm = reduxForm({
 })(ProjectEdit);
 
 function mapStateToProps(state){
-  console.log(state);
   return {
     formValue: state.form.editProjectForm,
     projectDetail: state.projectDetail,
