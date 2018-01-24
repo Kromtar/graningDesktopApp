@@ -20,12 +20,10 @@ class MainPanel extends Component {
   }
 
   onClickClients(){
-    console.log('click en clientes');
     this.props.windowClientTabViewList();
   }
 
   onClickProyects(){
-    console.log('click en proyectos');
     this.props.windowProjectTabViewList();
   }
 

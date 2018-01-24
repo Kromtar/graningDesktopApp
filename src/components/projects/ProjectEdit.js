@@ -98,7 +98,7 @@ class ProjectEdit extends Component {
   renderProjectStageTemp(){
     return _.map(this.props.newStage, stage => {
       return (
-        <li key={stage.name}>
+        <li key={stage.name} style={{borderStyle: 'solid', borderWidth: '2px', borderColor: '#0066cc'}}>
           <div className="collapsible-header" style={{display: 'block'}}>
             <i className="material-icons">device_hub</i>{stage.name}
             <i onClick={() => this.props.deleteTempStage(stage.tempId)} className="material-icons right" >delete</i>
@@ -129,7 +129,7 @@ class ProjectEdit extends Component {
   renderProjectStage(){
     return _.map(this.props.projectDetail._stage, (stage, stageIndex) => {
       return (
-          <li id={stage._id} key={stage._id}>
+          <li id={stage._id} key={stage._id} style={{borderStyle: 'solid', borderWidth: '2px', borderColor: '#0066cc'}}>
             <div className="collapsible-header" style={{display: 'block'}}>
               <i className="material-icons">device_hub</i>
                 {stage.name}

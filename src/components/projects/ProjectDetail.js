@@ -43,7 +43,7 @@ class ProjectDetail extends Component {
   renderProjectStage(){
     return _.map(this.props.projectDetailStatic._stage, stage => {
       return (
-          <li key={stage._id}>
+          <li key={stage._id} style={{borderStyle: 'solid', borderWidth: '2px', borderColor: '#0066cc'}}>
             <div className="collapsible-header"><i className="material-icons">device_hub</i>{stage.name}</div>
             <div className="collapsible-body">
               <div
@@ -104,7 +104,12 @@ class ProjectDetail extends Component {
               </div>
               <div className="col s6">
                 <p>Compañia: {field.company}</p>
-                <a onClick={() => console.log('Cargar info de usuario')} className="waves-effect waves-light btn" style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small', backgroundColor: '#3399ff'}}>
+                <a
+                  onClick={async () => {
+                    await this.props.getClientDetail(field._id);
+                    $('ul.tabs').tabs('select_tab', 'clients');
+                  }}
+                  className="waves-effect waves-light btn" style={{ height: '25px', lineHeight: '26px', padding: '0 0.5rem', fontSize: 'small', backgroundColor: '#3399ff'}}>
                   <i style={{marginLeft: '8px'}} className="material-icons right">visibility</i>
                   Ver más del Cliente
                 </a>

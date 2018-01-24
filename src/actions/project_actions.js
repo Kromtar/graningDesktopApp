@@ -259,7 +259,9 @@ export const editRevsFromProyect = (idProject) => async (dispatch, getState) =>{
 
   try {
     const token = await getToken();
-    await axios.put(`${getState().apiUrl}api/editRevFromProject`, getState().editRev, { headers: { auth: token, id: idProject } });
+    const editRev = getState().editRev;
+    console.log(editRev);
+    await axios.put(`${getState().apiUrl}api/editRevFromProject`, editRev, { headers: { auth: token, id: idProject } });
   } catch (err) {
     console.log(err);
   }

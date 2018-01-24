@@ -8,18 +8,6 @@
   width: 80% !important;
 }
 
-.-previous{
-    height: 50px !important;
-}
-
-.-next{
-    height: 50px !important;
-}
-
-.-center{
-    height: 50px !important;
-}
-
 .-pageJump input{
   margin-bottom: 0px  !important;
 }
@@ -94,11 +82,11 @@ select{
 }
 
 .rt-thead.-header {
-  background-color: #3399ff !important;
+  background-color: #a09fa2 !important;
 }
 
 .ReactTable {
-  border-color: #3399ff !important;
+  border-color: #a09fa2 !important;
 }
 
 .ReactTable > .rt-table {
@@ -106,16 +94,25 @@ select{
 }
 
 .pagination-bottom {
-  background-color: #3399ff !important;
+  background-color: #a09fa2 !important;
+  height: 50px !important;
 }
 
 .-pagination input {
   padding: 0px !important;
 }
 
+.-pagination {
+  height: 50px !important;
+}
+
 .-btn {
   color: rgb(0, 0, 0) !important;
   background-color: #ffffff !important;
+}
+
+.-pageInfo {
+  height: 48px !important;
 }
 
 input:focus {
@@ -133,4 +130,9 @@ label {
 
 blockquote{
   border-left: 5px solid #ff6600 !important;
+}
+
+li .active {
+  border-bottom-style: solid !important;
+  border-bottom-color: #0066cc !important;
 }

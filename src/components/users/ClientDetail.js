@@ -65,7 +65,12 @@ class ClientDetail extends Component {
         sortable: false,
         filterable: false,
         Cell: row => (
-          <a onClick={() => console.log('Abrir detalle del proyecto')} className="waves-effect waves-light btn"
+          <a
+            onClick={async () => {
+              await this.props.getProjectDetail(row.value);
+              $('ul.tabs').tabs('select_tab', 'projects');
+            }}
+            className="waves-effect waves-light btn"
             style={{
               color: '#fff',
               height: '25px',

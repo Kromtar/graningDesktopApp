@@ -52,10 +52,10 @@ class UsersList extends Component {
 
     const data = this.props.clients;
 
-    if(tableColumns.length === 3){
+    if(tableColumns.length === 4){
       tableColumns.pop();
     }
-    if(tableColumns.length <= 3){
+    if(tableColumns.length <= 4){
       tableColumns.push({
         Heder: 'Button',
         maxWidth: 120,

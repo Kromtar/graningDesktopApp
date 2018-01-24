@@ -53,15 +53,6 @@ const columns = [{
       />
     )
   },{
-    Header: 'Estado',
-    accessor: 'state', // String-based value accessors!
-    Filter: ({filter, onChange}) => (
-      <input
-        onChange={event => onChange(event.target.value)}
-        style={filterStyle}
-      />
-    )
-  },{
     Header: "Finalizado",
     maxWidth: 100,
     accessor: "finished",
