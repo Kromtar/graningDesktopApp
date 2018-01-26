@@ -46,15 +46,15 @@ class EditRev extends Component {
           <input
             value={this.conditionForRenderName()}
             onChange={(e) => {
-            this.props.addRevForEdit(
-              this.props.infoForUpdateRev.idRev,
-              this.props.infoForUpdateRev.stageId,
-              this.props.infoForUpdateRev.stageIndex,
-              this.props.infoForUpdateRev.revIndex,
-              {
-                name: e.target.value
-              }
-            );
+              this.props.addRevForEdit(
+                this.props.infoForUpdateRev.idRev,
+                this.props.infoForUpdateRev.stageId,
+                this.props.infoForUpdateRev.stageIndex,
+                this.props.infoForUpdateRev.revIndex,
+                {
+                  name: e.target.value
+                }
+              );
           }} type="text" className="validate" />
         </div>
         <div className="row">

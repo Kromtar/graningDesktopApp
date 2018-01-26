@@ -56,7 +56,7 @@ class AddRev extends Component {
           <div className="col s6">
             <a
               onClick={() => {
-                if($('#rev').val().length <= 3){
+                if($('#rev').val().length <= 2){
                   //TODO:Crear alerta
                   console.log('Pocos caracteres');
                 }else{

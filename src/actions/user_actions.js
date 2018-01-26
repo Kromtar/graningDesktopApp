@@ -14,7 +14,7 @@ export const loginUser = (credentials) => async (dispatch, getState) => {
     credentials.getToken = true; //TODO: Momentaneo para que la API nos retorne un Token y no el objeto de usuario
 
     try {
-      const res = await axios.post(`${getState().apiUrl}api/loginUser`, credentials);
+      const res = await axios.post(`${getState().apiUrl}api/loginUserAdmin`, credentials);
       //Guarda el token en electron
       electron.ipcRenderer.send('newToken', res.data.token);
       dispatch({ type: LOGIN_USER, payload: true });
@@ -222,6 +222,27 @@ export const deleteClient = (id) => async (dispatch, getState) =>{
     const token = await getToken();
     console.log(id);
     const res = await axios.put(`${getState().apiUrl}api/deleteUser`, null ,{ headers: { auth: token, id: id } });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+//Pregunta por la apiKey de Dropbox
+export const getDrioboxKey = () => async (dispatch, getState) => {
+
+  function getToken(){
+    return new Promise(resolve => {
+        electron.ipcRenderer.send('getToken')
+        electron.ipcRenderer.on('getToken', (event, result) => {
+          resolve(result);
+        })
+    });
+  }
+
+  try {
+    const token = await getToken();
+    const res = await axios.post(`${getState().apiUrl}api/getDropboxKey`, null ,{ headers: { auth: token } });
+    electron.ipcRenderer.send('setDropboxKey', res.data);
   } catch (err) {
     console.log(err);
   }

@@ -4,6 +4,8 @@ import $ from 'jquery';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
+const {shell} = window.require("electron");
+
 class ProjectDetail extends Component {
 
   componentDidMount(){
@@ -127,7 +129,15 @@ class ProjectDetail extends Component {
 
   renderDocumentSection(){
     if(this.props.projectDetailStatic.filename){
-      return <div>Nombre del último archivo disponible: {this.props.projectDetailStatic.filename}</div>;
+      return (
+        <div>
+          Nombre del último archivo disponible: {this.props.projectDetailStatic.filename}
+          <a onClick={() => shell.openExternal(this.props.projectDetailStatic.url)} className="waves-effect waves-light right btn" style={{backgroundColor: '#ff6600', marginBottom: '10px'}}>
+            Descargar
+            <i className="material-icons right">_cloud_download</i>
+          </a>
+        </div>
+      );
     }else{
       return <blockquote><p>No hay documentos en este proyecto actualmente</p></blockquote>;
     }
