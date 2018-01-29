@@ -60,6 +60,3 @@ typings/
 #Otros
 build/
 release-builds/
-
-#Keys
-src/config/keys.js

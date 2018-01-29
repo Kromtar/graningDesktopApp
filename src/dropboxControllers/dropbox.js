@@ -12,7 +12,6 @@ class DropboxUploadStream extends Transform {
 	}
 
 	_transform(chunk, encoding, next) {
-		console.log('Write: ', chunk.byteLength / 1024 + ' KB');
 		this.mainWindow.webContents.send('newChunkUpdate', chunk.byteLength / 1024);
 
 		if (!this.sessionId) {
@@ -33,15 +32,12 @@ class DropboxUploadStream extends Transform {
 	 * @param next
 	 */
 	sessionStart(chunk, next) {
-		console.log('SessionStart: Start');
 		this.dropbox.filesUploadSessionStart({
 			close: false,
 			contents: chunk
 		})
 		.then((response) => {
-			console.log('SessionStart: End');
 			this.sessionId = response.session_id;
-			console.log(`Session id: ${response.session_id}`);
 			this.offset += chunk.byteLength;
 			return next();
 		}, next);
@@ -54,7 +50,6 @@ class DropboxUploadStream extends Transform {
 	 * @param next
 	 */
 	sessionAppend(chunk, next) {
-		console.log('SessionAppend: Start');
 		this.dropbox.filesUploadSessionAppendV2({
 			cursor: {
 				session_id: this.sessionId,
@@ -64,19 +59,12 @@ class DropboxUploadStream extends Transform {
 			contents: chunk
 		})
 		.then(() => {
-			console.log('SessionAppend: End');
 			this.offset += chunk.byteLength;
 			next();
 		}, next);
 	}
 
-	/**
-	 * Closes the session and commits the file(s)
-	 *
-	 * @param next
-	 */
 	sessionFinish(next) {
-		console.log('SessionFinish: Start', this.offset);
 		this.dropbox.filesUploadSessionFinish({
 			"cursor": {
 				"session_id": this.sessionId,
@@ -90,8 +78,6 @@ class DropboxUploadStream extends Transform {
 			}
 		})
 		.then((uploadFile) => {
-			console.log('SessionFinish: End');
-
 			this.mainWindow.webContents.send('endUploadFile');
 
 			this.dropbox.sharingCreateSharedLinkWithSettings({

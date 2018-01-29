@@ -2,6 +2,9 @@
 import { FETCH_PROJECTDETAIL, NEW_EDIT_REV, COPY_PROJECTDETAILSTATIC_TO_PROJECTDETAIL } from '../actions/types';
 import update from 'react-addons-update';
 
+
+//TODO: Realizar un refactor y hacer map con index para manejo de informacion (paquete externo npm para esto)
+
 export default function(state = [] , action) {
   switch (action.type){
     case FETCH_PROJECTDETAIL:

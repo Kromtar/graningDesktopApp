@@ -12,9 +12,7 @@ class LoginForm extends Component {
   render(){
 
     const onClickLogin = (credentials) => {
-        //TODO: Validar datos
-        //      Feedback de errores
-        //      Feedback de login en proceso
+        //TODO: Validar input, agregar feedback
         this.props.loginUser(credentials, this.props.history);
     }
 
@@ -22,7 +20,7 @@ class LoginForm extends Component {
       <div className="container" style={{ marginTop:  '30px'}}>
         <form onSubmit={this.props.handleSubmit((credentials) => onClickLogin(credentials))}>
           <div className="row center-align">
-            <img src={logo}/>
+            <img alt="logo" src={logo}/>
           </div>
           <div className="row">
             <div className="col s6 offset-s3">

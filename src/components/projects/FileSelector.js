@@ -18,13 +18,12 @@ class FileSector extends Component {
   };
 
   onDrop = (files) => {
-    // invalid file types are not added to files object
+
     const file = _.map(files, ({ name, path, size, type }) => {
       return { name, path, size, type };
     });
 
     if (file.length > 0) {
-      console.log(file);
       const fileFormat = file[0].name.split('.')[1];
       if(fileFormat === "zip"){
         this.props.addFile(file);

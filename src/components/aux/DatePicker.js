@@ -6,7 +6,6 @@ const datePicker = (props) => {
 
   const input = props.input;
   const label = props.label;
-  const placeholder = props.placeholder;
 
   return (
     <div>

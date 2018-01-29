@@ -54,8 +54,6 @@ class ProjectsList extends Component {
 
       const data = this.props.projects;
 
-      //Agrega la columna del boton que requiere activar una acction
-      //Tenemos una condicion de tamañano, porque el render se ejecuta 2 veces al inicio y se generan 2 botones
       if(tableColumns.length === 6){
         tableColumns.pop();
       }

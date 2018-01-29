@@ -224,7 +224,6 @@ class ProjectEdit extends Component {
 
   renderProjectRev(stage, stageIndex){
     if(stage._review.length > 0){
-      var count = 0;
       return _.map(stage._review, (review, revIndex) => {
         return (
           <div
@@ -352,12 +351,12 @@ class ProjectEdit extends Component {
 
             if(Object.keys(this.props.editRev).length > 0){
               console.log('enviando Pet: editRev');
-              await this.props.editRevsFromProyect(this.props.projectDetail._id);
+              await this.props.editRevsFromProyect();
             }
 
             if(this.props.deleteRevList.length > 0){
               console.log('enviando Pet: deleteRev');
-              await this.props.deleteRevFromProject(this.props.projectDetail._id);
+              await this.props.deleteRevFromProject();
             }
 
 

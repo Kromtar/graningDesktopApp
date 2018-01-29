@@ -3,7 +3,6 @@ const path = require('path');
 const url = require('url');
 const {app, BrowserWindow, ipcMain, Menu} = require('electron');
 const Store = require('electron-store');
-const keys = require('./config/keys');
 
 //Dropbox
 const TransformStream = require('./dropboxControllers/transform');
@@ -157,6 +156,8 @@ ipcMain.on('uploadFile', (event, fileInput, proyectId) => {
 
 //Elimina un fichero
 ipcMain.on('deleteFile', (event, projectId) => {
+  const dropbox = new Dropbox({ accessToken: dropboxApiKey });
+
   dropbox.filesDeleteV2({path: '/graningportaldb/'+ projectId }).then((res) => {
     console.log('Fichero eliminado');
   }).catch((err) => {

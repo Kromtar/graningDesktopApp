@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
-import $ from 'jquery';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-
-//value={this.props.projectDetail._stage[this.props.infoForUpdateRev.stageIndex]._review[this.props.infoForUpdateRev.revIndex].name}
-
 
 class EditRev extends Component {
 

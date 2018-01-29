@@ -10,7 +10,7 @@ const filterStyle = {
 const columns = [{
   Header: 'Cod. Graning',
   maxWidth: 150,
-  accessor: 'internalcode', // String-based value accessors!
+  accessor: 'internalcode',
   Filter: ({filter, onChange}) => (
     <input
       onChange={event => onChange(event.target.value)}
@@ -19,7 +19,7 @@ const columns = [{
   )
 },{
   Header: 'Nombre',
-  accessor: 'name', // String-based value accessors!
+  accessor: 'name',
   Filter: ({filter, onChange}) => (
     <input
       onChange={event => onChange(event.target.value)}

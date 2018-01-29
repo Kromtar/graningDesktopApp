@@ -13,7 +13,6 @@ import {
   DELETE_TEMP_REV,
   ADD_REVID_FOR_DELETE,
   NEW_EDIT_REV,
-  UPDATE_EDIT_REV_MODAL,
   ADD_FILE,
   REMOVE_FILE,
   WINDOWUPLOADCONSOLE,
@@ -23,9 +22,8 @@ import {
 
 const electron = window.require("electron");
 
-//Consulta a la API por la lista de todos los proyectos
+//Consulta a la API por la lista de todos los proyectos disponibles
 export const fetchProjects = () => async (dispatch, getState) =>{
-
   function getToken(){
     return new Promise(resolve => {
         electron.ipcRenderer.send('getToken')
@@ -45,8 +43,7 @@ export const fetchProjects = () => async (dispatch, getState) =>{
 };
 
 //Crea un nuevo proyecto
-export const createNewProject = (data) => async (dispatch, getState) =>{
-
+export const createNewProject = ({values}) => async (dispatch, getState) =>{
   function getToken(){
     return new Promise(resolve => {
         electron.ipcRenderer.send('getToken')
@@ -58,16 +55,14 @@ export const createNewProject = (data) => async (dispatch, getState) =>{
 
   try {
     const token = await getToken();
-    const res = await axios.post(`${getState().apiUrl}api/createProject`, data.values, { headers: { auth: token } });
-
+    await axios.post(`${getState().apiUrl}api/createProject`, values, { headers: { auth: token } });
   } catch (err) {
     console.log(err);
   }
 };
 
-//Busca el detalle de un projecto
-export const getProjectDetail = (data) => async (dispatch, getState) =>{
-
+//Pide el detalle de un projecto
+export const getProjectDetail = (id) => async (dispatch, getState) =>{
   function getToken(){
     return new Promise(resolve => {
         electron.ipcRenderer.send('getToken')
@@ -79,23 +74,19 @@ export const getProjectDetail = (data) => async (dispatch, getState) =>{
 
   try {
     const token = await getToken();
-    const resP = await axios.get(`${getState().apiUrl}api/getProjectDetail`, { headers: { auth: token, id: data } });
-    const resU = await axios.get(`${getState().apiUrl}api/getClientsFromProject`, { headers: { auth: token, id: data } });
-
-    dispatch({ type: FETCH_PROJECTDETAIL, payload: resP.data });
-    dispatch({ type: FETCH_PROJECTDETAIL_STATIC, payload: resP.data });
-    dispatch({ type: FETCH_PROJECT_USERS, payload: resU.data });
+    const resProjectDetail = await axios.get(`${getState().apiUrl}api/getProjectDetail`, { headers: { auth: token, id }});
+    const resUsersFromProject = await axios.get(`${getState().apiUrl}api/getClientsFromProject`, { headers: { auth: token, id }});
+    dispatch({ type: FETCH_PROJECTDETAIL, payload: resProjectDetail.data });
+    dispatch({ type: FETCH_PROJECTDETAIL_STATIC, payload: resProjectDetail.data });
+    dispatch({ type: FETCH_PROJECT_USERS, payload: resUsersFromProject.data });
     dispatch({ type: WINDOWPROJECTTAB, payload: 'detail' });
-
   } catch (err) {
     console.log(err);
   }
 };
 
-
-//Edita el contenido principal de un proyecto
-export const editProjectGeneral = (id, data) => async (dispatch, getState) =>{
-
+//Edita el contenido general de un projecto
+export const editProjectGeneral = (id, {values}) => async (dispatch, getState) =>{
   function getToken(){
     return new Promise(resolve => {
         electron.ipcRenderer.send('getToken')
@@ -107,27 +98,25 @@ export const editProjectGeneral = (id, data) => async (dispatch, getState) =>{
 
   try {
     const token = await getToken();
-    await axios.put(`${getState().apiUrl}api/updateProjectGeneral`, data.values, { headers: { auth: token, id: id } });
-
+    const data = { values, id };
+    await axios.post(`${getState().apiUrl}api/updateProjectGeneral`, data, { headers: { auth: token }});
   } catch (err) {
     console.log(err);
   }
 };
 
-//Añade temporalmente una nueva estapa
+//Añade una etapa temporal
 export const tempNewStage = (stageName, tempId) => (dispatch) => {
   dispatch({ type: NEW_STAGE, payload: {name: stageName, tempId: tempId} });
 };
 
-//Elimina una stage temporal y su contenido
+//Elimina una etapa temporal
 export const deleteTempStage = (tempId) => (dispatch) => {
   dispatch({ type: DELETE_TEMP_STAGE , payload: tempId });
-  //TODO: Eliminar contenido de stage eliminada
 };
 
-//Añadir etapa al proyecto
+//Añade una nueva etapa a un proyecto
 export const addStageToProject = (id) => async (dispatch, getState) =>{
-
   function getToken(){
     return new Promise(resolve => {
         electron.ipcRenderer.send('getToken')
@@ -139,22 +128,21 @@ export const addStageToProject = (id) => async (dispatch, getState) =>{
 
   try {
     const token = await getToken();
-    await axios.put(`${getState().apiUrl}api/addStageToProject`, getState().newStage, { headers: { auth: token, id: id } });
+    const data = { values: getState().newStage, id }
+    await axios.post(`${getState().apiUrl}api/addStageToProject`, data, { headers: { auth: token} });
 
   } catch (err) {
     console.log(err);
   }
 };
 
-//añade id de etapas para ser eliminadas a un temporal
+//Añade una id de proyecto para ser eliminada
 export const addStageidForDelete = (idStage) => (dispatch, getState) =>{
   dispatch({ type: ADD_STAEGEID_FOR_DELETE , payload: idStage });
 };
 
-
-//elimina etapas de un proyecto
+//Elimina etapas de un projecto
 export const deleteStageFromProject = (idProject) => async (dispatch, getState) =>{
-
   function getToken(){
     return new Promise(resolve => {
         electron.ipcRenderer.send('getToken')
@@ -166,21 +154,22 @@ export const deleteStageFromProject = (idProject) => async (dispatch, getState) 
 
   try {
     const token = await getToken();
-    await axios.put(`${getState().apiUrl}api/deleteStageFromProject`, getState().deleteStageList, { headers: { auth: token, id: idProject } });
+    const listOfStagesForDelete = getState().deleteStageList
+    const data = {values: listOfStagesForDelete, id: idProject }
+    await axios.post(`${getState().apiUrl}api/deleteStageFromProject`, data , { headers: { auth: token }});
 
   } catch (err) {
     console.log(err);
   }
 };
 
-//añadir rev a una etapa nueva o antigua
+//Añade un rev temporal
 export const tempNewRev = (data, tempId ,stageId ) => (dispatch) => {
   dispatch({ type: NEW_REV, payload: {data: data, tempId: tempId, stageId: stageId} });
 };
 
-//añade rev a un projecto
+//Añade una rev a una stage
 export const addRevToProject = (id) => async (dispatch, getState) =>{
-
   function getToken(){
     return new Promise(resolve => {
         electron.ipcRenderer.send('getToken')
@@ -192,10 +181,10 @@ export const addRevToProject = (id) => async (dispatch, getState) =>{
 
   try {
     const token = await getToken();
-    const data = getState().newRev;
-    const revsWhitoutTempId =_.map(data, e => _.pick(e, ['data', 'stageId']));
-    await axios.put(`${getState().apiUrl}api/addRevsToProject`, revsWhitoutTempId, { headers: { auth: token, id: id } });
-
+    const newRevList = getState().newRev;
+    const revsWhitoutTempId =_.map(newRevList, e => _.pick(e, ['data', 'stageId']));
+    const data = { values: revsWhitoutTempId, id }
+    await axios.post(`${getState().apiUrl}api/addRevsToProject`, data, { headers: { auth: token }});
   } catch (err) {
     console.log(err);
   }
@@ -206,15 +195,13 @@ export const deleteTempRev = (tempId) => (dispatch) => {
   dispatch({ type: DELETE_TEMP_REV , payload: tempId });
 };
 
-//añade id de rev para ser eliminadas a un temporal
+//Añade id de rev para ser eliminada
 export const addRevidForDelete = (idRev, IdStage) => (dispatch, getState) =>{
   dispatch({ type: ADD_REVID_FOR_DELETE , payload: {idStage: IdStage, idRev: idRev} });
 };
 
-
-//elimina rev de un proyecto
-export const deleteRevFromProject = (idProject) => async (dispatch, getState) =>{
-
+//Elimina revs de una stage
+export const deleteRevFromProject = () => async (dispatch, getState) =>{
   function getToken(){
     return new Promise(resolve => {
         electron.ipcRenderer.send('getToken')
@@ -226,13 +213,14 @@ export const deleteRevFromProject = (idProject) => async (dispatch, getState) =>
 
   try {
     const token = await getToken();
-    await axios.put(`${getState().apiUrl}api/deleteRevFromProject`, getState().deleteRevList, { headers: { auth: token, id: idProject } });
+    const listOfRevForDelete = getState().deleteRevList;
+    await axios.post(`${getState().apiUrl}api/deleteRevFromProject`, listOfRevForDelete, { headers: { auth: token }});
   } catch (err) {
     console.log(err);
   }
 };
 
-//añade id de rev para ser editada
+//Añade la id de una rev para ser editada
 export const addRevForEdit = (idRev, IdStage,stageIndex,revIndex, data) => (dispatch, getState) =>{
   dispatch({ type: NEW_EDIT_REV , payload: {
     idStage: IdStage,
@@ -244,10 +232,8 @@ export const addRevForEdit = (idRev, IdStage,stageIndex,revIndex, data) => (disp
   });
 };
 
-
-//editar rev de una etapa antigua
-export const editRevsFromProyect = (idProject) => async (dispatch, getState) =>{
-
+//Edita revisiones de etapas especificas
+export const editRevsFromProyect = () => async (dispatch, getState) =>{
   function getToken(){
     return new Promise(resolve => {
         electron.ipcRenderer.send('getToken')
@@ -260,37 +246,32 @@ export const editRevsFromProyect = (idProject) => async (dispatch, getState) =>{
   try {
     const token = await getToken();
     const editRev = getState().editRev;
-    console.log(editRev);
-    await axios.put(`${getState().apiUrl}api/editRevFromProject`, editRev, { headers: { auth: token, id: idProject } });
+    await axios.post(`${getState().apiUrl}api/editRevFromProject`, editRev, { headers: { auth: token }});
   } catch (err) {
     console.log(err);
   }
 };
 
-//camiar nombre de etapa antigua
-
-//añadir rev a etapa temporal**cuestioable
-
-//Añedi un archivo para subir
+//Añede un archivo para subir
 export const addFile = (video) => dispatch => {
   dispatch({ type: ADD_FILE, payload: { ...video } });
 };
 
-//Remueve el archivo para subir
+//Remueve el archivo para subir actual
 export const removeFile = () => dispatch => {
   dispatch({ type: REMOVE_FILE});
 };
 
-//Inicia la subida del nuevo Fichero
+//Inicia la subida de un nuevo Fichero
 export const uploadNewFile = (proyectId) => (dispatch, getState) => {
   const fileInfo = getState().fileSelected;
+  //TODO: Detectar error en la subida de fichero
   electron.ipcRenderer.send('uploadFile', fileInfo, proyectId);
   dispatch({ type: WINDOWUPLOADCONSOLE, payload: { fileSize: fileInfo[0].size }});
 };
 
-//Guarda el link de descarga en el proyecto
+//Guarda el link de descarga en el modelo del proyecto
 export const sendLinkProject = () => async (dispatch, getState) =>{
-
   function getToken(){
     return new Promise(resolve => {
         electron.ipcRenderer.send('getToken')
@@ -301,21 +282,16 @@ export const sendLinkProject = () => async (dispatch, getState) =>{
   }
 
   try {
-
     const token = await getToken();
     const data = getState().window_UploadConsole.link;
     const name = getState().fileSelected[0].name;
-
-    const res = await axios.post(`${getState().apiUrl}api/addLinkToPtoject`, {name, data}, { headers: { auth: token } });
-
+    await axios.post(`${getState().apiUrl}api/addLinkToPtoject`, {name, data}, { headers: { auth: token } });
     dispatch({ type: WINDOWUPLOADCONSOLE, payload: {
       content: 'finished',
       fileSize: '',
       link: ''
     }});
-
     dispatch({ type: REMOVE_FILE });
-
   } catch (err) {
     console.log(err);
   }
@@ -326,14 +302,13 @@ export const closeWindowUploadConsole = () => async (dispatch, getState) =>{
   dispatch({ type: WINDOWUPLOADCONSOLE_RESET });
 }
 
-//Añade una id de projecto donde se tiene que eliminar un projecto
+//Añade la id del projecto donde se tiene que eliminar un fichero
 export const addIdProjectForDeleteFile = (projecyId) => async (dispatch, getState) =>{
   dispatch({ type: ADD_FILE_TO_DELETE, payload: projecyId});
 }
 
-//Elimina un fichero desde un proyecto
+//Elimina un fichero de un projecto
 export const deleteFileFromproject = () => async (dispatch, getState) =>{
-
   function getToken(){
     return new Promise(resolve => {
         electron.ipcRenderer.send('getToken')
@@ -344,23 +319,18 @@ export const deleteFileFromproject = () => async (dispatch, getState) =>{
   }
 
   try {
-
     const token = await getToken();
     const projectId = getState().deleteFileFromProject;
-
     //TODO: Agregar un callback para confirmar que se elimino
     electron.ipcRenderer.send('deleteFile', projectId);
-
-    const res = await axios.post(`${getState().apiUrl}api/deleteLinkFromProject`, {projectId}, { headers: { auth: token } });
-
+    await axios.delete(`${getState().apiUrl}api/deleteLinkFromProject`, { headers: { auth: token, id: projectId } });
   } catch (err) {
     console.log(err);
   }
 };
 
-//Eliminar un proyecto
+//Eliminar un proyecto, sus contenidos relacionados y el fichero
 export const deleteProject = (idProject) => async (dispatch, getState) =>{
-
   function getToken(){
     return new Promise(resolve => {
         electron.ipcRenderer.send('getToken')
@@ -374,7 +344,7 @@ export const deleteProject = (idProject) => async (dispatch, getState) =>{
     const token = await getToken();
     //TODO: Agregar un callback para confirmar que se elimino
     electron.ipcRenderer.send('deleteFile', idProject);
-    await axios.post(`${getState().apiUrl}api/deleteProject`, {idProject}, { headers: { auth: token } });
+    await axios.delete(`${getState().apiUrl}api/deleteProject`, { headers: { auth: token, id: idProject } });
   } catch (err) {
     console.log(err);
   }

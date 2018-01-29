@@ -8,18 +8,16 @@ import {
 } from './types';
 const electron = window.require("electron");
 
-//Login de Usuario a la API
+//Login de Usuario
 export const loginUser = (credentials) => async (dispatch, getState) => {
-
-    credentials.getToken = true; //TODO: Momentaneo para que la API nos retorne un Token y no el objeto de usuario
-
+    //Para retorno de token activado
+    credentials.getToken = true;
     try {
       const res = await axios.post(`${getState().apiUrl}api/loginUserAdmin`, credentials);
-      //Guarda el token en electron
       electron.ipcRenderer.send('newToken', res.data.token);
       dispatch({ type: LOGIN_USER, payload: true });
     } catch (err) {
-      console.log(err); //TODO:Manejo de error con mensaje
+      console.log(err);
     }
 };
 
@@ -43,17 +41,15 @@ export const checkToken = () => async (dispatch, getState) => {
   try {
     const token = await getToken();
     const res = await axios.get(`${getState().apiUrl}api/validateToken`, { headers: { auth: token } });
-
     if(res.data.status){
       dispatch({ type: LOGIN_USER, payload: true });
     }
-
   } catch (err) {
     console.log(err);
   }
 };
 
-//Consulta a la API por todos los usuarios
+//Lista todos los usuarios (solo clientes)
 export const fetchClients = () => async (dispatch, getState) =>{
 
   function getToken(){
@@ -68,7 +64,6 @@ export const fetchClients = () => async (dispatch, getState) =>{
   try {
     const token = await getToken();
     const res = await axios.get(`${getState().apiUrl}api/allClients`, { headers: { auth: token } });
-
     dispatch({ type: FECTH_CLIENTS, payload: res.data });
   } catch (err) {
     console.log(err);
@@ -89,13 +84,13 @@ export const createNewUser = (data) => async (dispatch, getState) =>{
 
   try {
     const token = await getToken();
-    const res = await axios.post(`${getState().apiUrl}api/createUser`, data.values, { headers: { auth: token } });
+    await axios.post(`${getState().apiUrl}api/createUser`, data.values, { headers: { auth: token } });
   } catch (err) {
     console.log(err);
   }
 };
 
-//Busca el detalle de un projecto
+//Busca el detalle de un projecto de un usuario
 export const getClientDetail = (data) => async (dispatch, getState) =>{
 
   function getToken(){
@@ -133,7 +128,7 @@ export const addProjectToClient = (data) => async (dispatch, getState) =>{
 
   try {
     const token = await getToken();
-    const res = await axios.put(`${getState().apiUrl}api/addProjectToClient`, data, { headers: { auth: token } });
+    await axios.post(`${getState().apiUrl}api/addProjectToClient`, data, { headers: { auth: token } });
   } catch (err) {
     console.log(err);
   }
@@ -159,14 +154,14 @@ export const removeProjectToClient = (clientId, projectId) => async (dispatch, g
 
   try {
     const token = await getToken();
-    const res = await axios.put(`${getState().apiUrl}api/removeProjectToClient`, data, { headers: { auth: token } });
+    await axios.post(`${getState().apiUrl}api/removeProjectToClient`, data, { headers: { auth: token } });
   } catch (err) {
     console.log(err);
   }
 };
 
 //Edita los datos de un cliente
-export const editClientGeneral = (id, data) => async (dispatch, getState) =>{
+export const editClientGeneral = (id, values) => async (dispatch, getState) =>{
 
   function getToken(){
     return new Promise(resolve => {
@@ -179,14 +174,15 @@ export const editClientGeneral = (id, data) => async (dispatch, getState) =>{
 
   try {
     const token = await getToken();
-    const res = await axios.put(`${getState().apiUrl}api/updateClientGeneral`, data, { headers: { auth: token, id: id } });
+    const data = {values,  id}
+    await axios.post(`${getState().apiUrl}api/updateClientGeneral`, data, { headers: { auth: token }});
   } catch (err) {
     console.log(err);
   }
 };
 
 
-//Edita los datos de un cliente
+//Guarda una nueva password para el cliente
 export const newPasswordForUser = (id, pass) => async (dispatch, getState) =>{
 
   function getToken(){
@@ -200,7 +196,8 @@ export const newPasswordForUser = (id, pass) => async (dispatch, getState) =>{
 
   try {
     const token = await getToken();
-    const res = await axios.put(`${getState().apiUrl}api/changePassword`, {pass}, { headers: { auth: token, id: id } });
+    const data = { pass, id}
+    await axios.post(`${getState().apiUrl}api/changePassword`, data, { headers: { auth: token } });
   } catch (err) {
     console.log(err);
   }
@@ -220,15 +217,14 @@ export const deleteClient = (id) => async (dispatch, getState) =>{
 
   try {
     const token = await getToken();
-    console.log(id);
-    const res = await axios.put(`${getState().apiUrl}api/deleteUser`, null ,{ headers: { auth: token, id: id } });
+    await axios.delete(`${getState().apiUrl}api/deleteUser`, { headers: { auth: token, id: id } });
   } catch (err) {
     console.log(err);
   }
 };
 
 //Pregunta por la apiKey de Dropbox
-export const getDrioboxKey = () => async (dispatch, getState) => {
+export const getDropboxKey = () => async (dispatch, getState) => {
 
   function getToken(){
     return new Promise(resolve => {
@@ -241,7 +237,7 @@ export const getDrioboxKey = () => async (dispatch, getState) => {
 
   try {
     const token = await getToken();
-    const res = await axios.post(`${getState().apiUrl}api/getDropboxKey`, null ,{ headers: { auth: token } });
+    const res = await axios.get(`${getState().apiUrl}api/getDropboxKey`, { headers: { auth: token } });
     electron.ipcRenderer.send('setDropboxKey', res.data);
   } catch (err) {
     console.log(err);

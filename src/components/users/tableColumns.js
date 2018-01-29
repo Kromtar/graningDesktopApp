@@ -10,7 +10,7 @@ const filterStyle = {
 const columns = [{
   Header: 'Empresa',
   maxWidth: 150,
-  accessor: 'company', // String-based value accessors!
+  accessor: 'company',
   Filter: ({filter, onChange}) => (
     <input
       onChange={event => onChange(event.target.value)}
@@ -28,7 +28,7 @@ const columns = [{
     />
   )
 }, {
-  Header: 'Email', // Required because our accessor is not a string
+  Header: 'Email',
   accessor: 'email',
   Filter: ({filter, onChange}) => (
     <input

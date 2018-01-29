@@ -17,7 +17,7 @@ class MainPanel extends Component {
 
     this.props.fetchClients();
     this.props.fetchProjects();
-    this.props.getDrioboxKey();
+    this.props.getDropboxKey();
   }
 
   onClickClients(){

@@ -6,53 +6,33 @@ import update from 'react-addons-update';
 export default function(state = {} , action) {
   switch (action.type){
     case NEW_EDIT_REV:
-      var review = {};
-
-      function name(){
-        if(typeof(action.payload.data.name) === "undefined"){
-          if(Object.keys(state).length > 0){
-            return state[action.payload.idStage][action.payload.idRev].name;
-          }else{
-            return action.payload.originalData._stage[action.payload.stageIndex]._review[action.payload.revIndex].name;
+      var newState;
+      //**En caso de no tener la Rev registrada para ser editada, se crea y llena con los valores iniciales**//
+      if(typeof(state[action.payload.idRev]) === 'undefined'){
+        state = update(state,
+          {
+            [action.payload.idRev]: {$set: {
+              name: action.payload.originalData._stage[action.payload.stageIndex]._review[action.payload.revIndex].name,
+              companytoclientdate: action.payload.originalData._stage[action.payload.stageIndex]._review[action.payload.revIndex].companytoclientdate,
+              clienttocompany: action.payload.originalData._stage[action.payload.stageIndex]._review[action.payload.revIndex].clienttocompany,
+            }}
           }
-        }else{
-          return action.payload.data.name;
+        );
+      }
+
+      newState = update(state,
+        {
+          [action.payload.idRev]: {$apply: function(prev) {
+            //**Solo en caso de que vengan datos nuevos se remplaza el registro, sino se deja el dato anterior**//
+            return ({
+              name: typeof(action.payload.data.name) !== 'undefined' ? action.payload.data.name : prev.name,
+              companytoclientdate: typeof(action.payload.data.companytoclientdate) !== 'undefined' ? action.payload.data.companytoclientdate : prev.companytoclientdate,
+              clienttocompany: typeof(action.payload.data.clienttocompany) !== 'undefined' ? action.payload.data.clienttocompany : prev.clienttocompany
+            });
+          }}
         }
-      }
-
-      function companytoclientdate(){
-        if(typeof(action.payload.data.companytoclientdate) === "undefined"){
-          if(Object.keys(state).length > 0){
-            return state[action.payload.idStage][action.payload.idRev].companytoclientdate;
-          }else{
-            return action.payload.originalData._stage[action.payload.stageIndex]._review[action.payload.revIndex].companytoclientdate;
-          }
-        }else{
-          return action.payload.data.companytoclientdate;
-        }
-      }
-
-      function clienttocompany(){
-        if(typeof(action.payload.data.clienttocompany) === "undefined"){
-          if(Object.keys(state).length > 0){
-            return state[action.payload.idStage][action.payload.idRev].clienttocompany;
-          }else{
-            return action.payload.originalData._stage[action.payload.stageIndex]._review[action.payload.revIndex].clienttocompany;
-          }
-        }else{
-          return action.payload.data.clienttocompany;
-        }
-      }
-
-      review = state[action.payload.idStage] ? state[action.payload.idStage] : {};
-
-      review[action.payload.idRev] = {
-        name: name(),
-        companytoclientdate: companytoclientdate(),
-        clienttocompany: clienttocompany()
-      }
-
-      return update(state, { [action.payload.idStage]: {$set: review}});
+      );
+      return newState;
     case CLEAR_EDIT_REV:
       return {};
     default:

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Line, Circle } from 'rc-progress';
+import { Line } from 'rc-progress';
 import * as actions from '../../actions';
 
 class ProjectFileUplaod extends Component {
@@ -32,7 +32,6 @@ class ProjectFileUplaod extends Component {
 
   render(){
 
-      //TODO: Pasar a async y comprobar que recargue
       if(this.props.window_UploadConsole.content === 'linkReady'){
         this.props.sendLinkProject();
         this.props.getProjectDetail(this.props.projectDetailStatic._id);

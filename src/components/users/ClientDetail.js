@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import $ from 'jquery';

@@ -1,10 +1,8 @@
-import _ from 'lodash';
 import React, { Component } from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import { reduxForm, Field } from 'redux-form';
-import moment from 'moment';
 
 import InputField from '../aux/inputField';
 import validateUserForm from './validateUserForm';

@@ -1,6 +1,5 @@
 //Check contenido nuevo usuario
 import React, { Component } from 'react';
-import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 
 class ReviewNewUser extends Component {
