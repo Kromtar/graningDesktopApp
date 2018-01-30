@@ -28,9 +28,9 @@ function createWindow(){
     console.log('startUrl: ',process.env.DEV_URL);
     store.set('apiUrl', process.env.DEV_API_URL);
   }else{
-    console.log('In production mode, charge backend in http://localhost:5000/ server');
+    console.log('In production mode, charge backend in http://graning.herokuapp.com/ server');
     console.log('startUrl: ',__dirname, '/../build/index.html');
-    store.set('apiUrl', 'http://localhost:5000/');
+    store.set('apiUrl', 'http://graning.herokuapp.com/');
   }
 
   mainWindow = new BrowserWindow({
