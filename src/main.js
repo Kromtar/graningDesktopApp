@@ -36,9 +36,6 @@ function createWindow(){
   mainWindow = new BrowserWindow({
     width: 1100,
     height: 850,
-    webSecurity : false,
-    allowDisplayingInsecureContent : true,
-    allowRunningInsecureContent : true,
     icon: __dirname + '/img/favicon.ico'
   });
   mainWindow.maximize();
