@@ -28,14 +28,17 @@ function createWindow(){
     console.log('startUrl: ',process.env.DEV_URL);
     store.set('apiUrl', process.env.DEV_API_URL);
   }else{
-    console.log('In production mode, charge backend in http://graning.herokuapp.com/ server');
+    console.log('In production mode, charge backend in https://graning.herokuapp.com/ server');
     console.log('startUrl: ',__dirname, '/../build/index.html');
-    store.set('apiUrl', 'http://graning.herokuapp.com/');
+    store.set('apiUrl', 'https://graning.herokuapp.com/');
   }
 
   mainWindow = new BrowserWindow({
     width: 1100,
     height: 850,
+    webSecurity : false,
+    allowDisplayingInsecureContent : true,
+    allowRunningInsecureContent : true,
     icon: __dirname + '/img/favicon.ico'
   });
   mainWindow.maximize();

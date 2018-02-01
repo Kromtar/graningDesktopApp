@@ -13,7 +13,7 @@
     //Gracias a electorn podemos cargar modulos externos
     const electron = require('electron');
     const { ipcRenderer } = electron;
-    document.querySelector('input').value = process.env.DEV_URL ? process.env.DEV_API_URL : 'http://graning.herokuapp.com/';
+    document.querySelector('input').value = process.env.DEV_URL ? process.env.DEV_API_URL : 'https://graning.herokuapp.com/';
 
     document.querySelector('form').addEventListener('submit', (event) => {
       event.preventDefault();
